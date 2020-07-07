@@ -1,0 +1,15 @@
+nginx -s stop
+nginx -s start
+nginx -s reload
+nginx -v
+
+down:当前的server暂时不参与负载均衡
+backup:预留的备份服务器
+max_fails:允许请求失败的次数
+fail_timeout：经过max_fails失败后，服务暂停的时间
+max_conns:限制最大的接收的连接数
+ upstream zzm {
+        server localhost:8001 down;
+        server localhost:8002 backup;
+        server localhost:8003 max_fails=1 fail_timeout=10s;
+    }
