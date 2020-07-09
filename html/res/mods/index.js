@@ -5,7 +5,7 @@
  */
  
 
-layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(exports){
+layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'], function(exports){
   
   var $ = layui.jquery
   ,layer = layui.layer
@@ -15,9 +15,15 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   ,upload = layui.upload
   ,util = layui.util
   ,device = layui.device()
-
+  ,carousel = layui.carousel
   ,DISABLED = 'layui-btn-disabled';
-  
+
+  carousel.render({
+    elem: '#indexCarousel'
+    ,width: '100%' //设置容器宽度
+    ,arrow: 'hover' //悬停显示
+  });
+
   //阻止IE7以下访问
   if(device.ie && device.ie < 8){
     layer.alert('如果您非得使用 IE 浏览器访问Fly社区，那么请使用 IE8+');
