@@ -13,3 +13,18 @@ max_conns:限制最大的接收的连接数
         server localhost:8002 backup;
         server localhost:8003 max_fails=1 fail_timeout=10s;
     }
+
+
+<span class="layui-badge-dot"></span>红点样式
+
+    all 用于所有多媒体类型设备
+    print 用于打印机
+    screen 用于电脑屏幕，平板，智能手机等。
+    speech 用于屏幕阅读器
+@media screen and (min-width:960px) and (max-width:1200px){
+    body{
+        background:yellow;
+    }
+}
+上面的这段代码的意思是当页面宽度大于960px小于1200px的时候执行下面的CSS。
+jie.js 发贴监听专栏选择

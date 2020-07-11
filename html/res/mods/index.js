@@ -608,7 +608,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
   $('.fly-handles').each(function(){
     var othis = $(this);
     $.get('/api/handle?alias='+ othis.data('alias'), function(res){
-      othis.html('（下载量：'+ res.number +'）');
+      othis.html('(下载量：'+ res.number +')');
     })
   });
   
