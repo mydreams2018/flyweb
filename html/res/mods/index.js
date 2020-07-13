@@ -499,24 +499,27 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     layer.open({
       type: 1
       ,title: false
-      ,closeBtn: false
+      ,closeBtn: true
       //,shade: [0.1, '#fff']
       ,shadeClose: true
       ,maxWidth: 10000
       ,skin: 'fly-layer-search'
-      ,content: ['<form action="http://cn.bing.com/search">'
+      ,content: ['<form action="/">'
         ,'<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
       ,'</form>'].join('')
       ,success: function(layero){
         var input = layero.find('input');
         input.focus();
 
-        layero.find('form').submit(function(){
-          var val = input.val();
-          if(val.replace(/\s/g, '') === ''){
-            return false;
+        layero.find('form').submit(function(e){
+          e.preventDefault();//取消表单提交事件
+          var val = input.val().replace(/(^\s*)|(\s*$)/g, "");
+          if(val == ''){
+            return false;//如果数据为空返回
           }
-          input.val('site:layui.com '+ input.val());
+          layer.closeAll('page');//关闭弹窗
+          //TODO
+
       });
       }
     })
@@ -619,7 +622,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     ,click: function(type){
       if(type === 'bar1'){
         layer.msg('打开 index.js，开启发表新帖的路径');
-        //location.href = 'jie/add.html';
+        // location.href = '/';
       }
     }
   });
