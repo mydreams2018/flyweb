@@ -176,6 +176,12 @@ pre{padding: 10px 15px; margin: 10px 0; font-size: 12px; border-left: 6px solid 
   line-height: 280px;
   text-align: center;
 }
+.layui-carousel .bgfff{
+  background-color: #fff;
+}
+.bgfff img{
+  cursor: pointer;
+}
 /* 底部 */
 .fly-footer {margin: 50px 0 0; padding: 20px 0 30px; line-height: 30px; text-align: center; color: #737573; border-top: 1px solid #e2e2e2;}
 .fly-footer a{padding:0 6px; font-weight: 300; color: #333;}
@@ -462,7 +468,7 @@ body .fly-user-main{position: relative; min-height: 600px;}
 .app-bind .app-havebind .icon-qq{color:#7CA9C9}
 .app-bind .app-havebind .icon-weibo{color:#E6162D}
 
-/* 案例 */
+/* 精华 */
 .fly-case-header{position: relative; height: 260px; text-align: center; background: #393D49;}
 .fly-case-year{position: absolute; top: 30px; width: 100%; line-height: 50px; font-size: 50px; text-align: center; color: #fff; font-weight: 300;}
 .fly-case-banner{position: absolute; left: 50%; top: 100px; width: 670px; margin-left: -335px;}
@@ -549,7 +555,7 @@ body .fly-user-main{position: relative; min-height: 600px;}
 	.fly-detail-info .fly-list-nums{top: -2px;}
 	.fly-edit span{padding: 0 6px;}
 
-  /* 案例 */
+  /* 精华 */
   .fly-case-list,
   .fly-case-list li{width: 100%;  -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
   .fly-case-img{text-align: center;}

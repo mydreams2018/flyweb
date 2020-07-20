@@ -1,6 +1,6 @@
 /**
 
- @Name: 案例
+ @Name: 精华
 
  */
  
@@ -19,34 +19,34 @@ layui.define(['laypage', 'fly'], function(exports){
 
   //求解管理
   var active = {
-    //提交案例
+    //提交精华
     push: function(div){
       layer.open({
         type: 1
         ,id: 'LAY_pushcase'
-        ,title: '提交案例'
+        ,title: '提交精华'
         ,area: (device.ios || device.android) ? ($(window).width() + 'px') : '660px'
         ,content: ['<ul class="layui-form" style="margin: 20px;">'
           ,'<li class="layui-form-item">'
-            ,'<label class="layui-form-label">案例名称</label>'
+            ,'<label class="layui-form-label">精华名称</label>'
             ,'<div class="layui-input-block">'
               ,'<input required name="title" lay-verify="required" placeholder="一般为网站名称" value="" class="layui-input">'
             ,'</div>'
           ,'</li>'
           ,'<li class="layui-form-item">'
-            ,'<label class="layui-form-label">案例网址</label>'
+            ,'<label class="layui-form-label">精华网址</label>'
             ,'<div class="layui-input-block">'
               ,'<input required name="link" lay-verify="url" placeholder="必须是自己或自己参与过的项目" value="" class="layui-input">'
             ,'</div>'
           ,'</li>'
           ,'<li class="layui-form-item layui-form-text">'
-            ,'<label class="layui-form-label">案例描述</label>'
+            ,'<label class="layui-form-label">精华描述</label>'
             ,'<div class="layui-input-block layui-form-text">'
               ,'<textarea required name="desc" lay-verify="required" autocomplete="off" placeholder="大致介绍你的项目，也可以阐述你在该项目中使用 layui 的感受\n10-60个字" class="layui-textarea"></textarea>'
             ,'</div>'
           ,'</li>'
           ,'<li class="layui-form-item">'
-            ,'<label class="layui-form-label">案例封面</label>'
+            ,'<label class="layui-form-label">精华封面</label>'
             ,'<div class="layui-input-inline" style="width:auto;">'
               ,'<input type="hidden" name="cover" lay-verify="required" class="layui-input fly-case-image">'
               ,'<button type="button" class="layui-btn layui-btn-primary" id="caseUpload">'
@@ -58,12 +58,12 @@ layui.define(['laypage', 'fly'], function(exports){
           ,'<li class="layui-form-item">'
             ,'<label class="layui-form-label"> </label>'
             ,'<div class="layui-input-block">'
-              ,'<input type="checkbox" name="agree" id="agree" title="我同意（如果你进行了刷赞行为，你的案例将被立马剔除）" lay-skin="primary">'
+              ,'<input type="checkbox" name="agree" id="agree" title="我同意（如果你进行了刷赞行为，你的精华将被立马剔除）" lay-skin="primary">'
             ,'</div>'
           ,'</li>'
           ,'<li class="layui-form-item">'
             ,'<div class="layui-input-block">'
-              ,'<button type="button" lay-submit lay-filter="pushCase" class="layui-btn">提交案例</button>'
+              ,'<button type="button" lay-submit lay-filter="pushCase" class="layui-btn">提交精华</button>'
            ,'</div>'
           ,'</li>'
         ,'</ul>'].join('')
