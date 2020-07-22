@@ -31,6 +31,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     ,url: '/common/tableTest.json'
     ,title: '用户表'
     ,page: true
+    ,toolbar: 'default'
     ,totalRow: false
     ,cols: [[
        {type: 'checkbox', fixed: 'left'}

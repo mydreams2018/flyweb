@@ -1600,7 +1600,6 @@ a cite {
 }
 
 .layui-form-checkbox[lay-skin=primary] span {
-    float: right;
     padding-right: 15px;
     line-height: 18px;
     background: 0 0;
@@ -2368,15 +2367,93 @@ a cite {
     width: 50px
 }
 
+.layui-table-tool .layui-inline[lay-event] {
+    position: relative;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    line-height: 16px;
+    margin-right: 10px;
+    text-align: center;
+    color: #333;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    -webkit-transition: .5s all;
+    transition: .5s all
+}
+.layui-table-tool .layui-inline[lay-event]:hover {
+    border: 1px solid #999
+}
+
+.layui-table-tool-self {
+    position: absolute;
+    right: 17px;
+    top: 10px
+}
+
+.layui-table-tool .layui-table-tool-self .layui-inline[lay-event] {
+    margin: 0 0 0 10px
+}
+.layui-table-tool-panel {
+    position: absolute;
+    top: 29px;
+    left: -1px;
+    padding: 5px 0;
+    min-width: 150px;
+    min-height: 40px;
+    border: 1px solid #d2d2d2;
+    text-align: left;
+    overflow-y: auto;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,.12)
+}
+.layui-table-cell,.layui-table-tool-panel li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.layui-table-tool-panel li {
+    padding: 0 10px;
+    line-height: 30px;
+    -webkit-transition: .5s all;
+    transition: .5s all
+}
+
+.layui-table-tool-panel li .layui-form-checkbox[lay-skin=primary] {
+    width: 100%;
+    padding-left: 28px
+}
+.layui-table-tool-panel li:hover {
+    background-color: #f2f2f2
+}
+
+.layui-table-tool-panel li .layui-form-checkbox[lay-skin=primary] i {
+    position: absolute;
+    left: 0;
+    top: 0
+}
+.layui-table-tool-panel li .layui-form-checkbox[lay-skin=primary] span {
+    padding: 0
+}
+
+.layui-table-tool .layui-table-tool-self .layui-table-tool-panel {
+    left: auto;
+    right: -1px
+}
 .layui-table-tool {
     position: relative;
+    z-index: 890;
     width: 100%;
-    height: 50px;
+    min-height: 50px;
     line-height: 30px;
     padding: 10px 15px;
     border-width: 0 0 1px
 }
 
+.layui-table-tool .layui-btn-container {
+    margin-bottom: -10px
+}
 .layui-table-page {
     position: relative;
     width: 100%;
