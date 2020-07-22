@@ -5,7 +5,7 @@
  */
  
 
-layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'], function(exports){
+layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel', 'table'], function(exports){
   
   var $ = layui.jquery
   ,layer = layui.layer
@@ -16,6 +16,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
   ,util = layui.util
   ,device = layui.device()
   ,carousel = layui.carousel
+  ,table = layui.table
   ,DISABLED = 'layui-btn-disabled';
 
   carousel.render({
@@ -23,11 +24,48 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     ,width: '100%' //设置容器宽度
     ,arrow: 'hover' //悬停显示
   });
-
+//执行一个 table 实例
+  table.render({
+    elem: '#demo'
+    ,height: 520
+    ,url: '/common/tableTest.json'
+    ,title: '用户表'
+    ,page: true
+    ,totalRow: false
+    ,cols: [[
+       {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'username', title: '用户名', width:80}
+      ,{field: 'experience', title: '积分', width: 90, sort: true, totalRow: true}
+      ,{field: 'sex', title: '性别', width:80, sort: true}
+      ,{field: 'score', title: '评分', width: 80, sort: true, totalRow: true}
+      ,{field: 'city', title: '城市', width:150}
+      ,{field: 'sign', title: '签名', width: 200}
+      ,{field: 'classify', title: '职业', width: 100}
+      ,{field: 'wealth', title: '财富', width: 135, sort: true, totalRow: true}
+      ,{fixed: 'right', title: '操作',width: 165, align:'center', toolbar: '#barDemo'}
+    ]]
+  });
+  //监听行工具事件
+  table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+    var data = obj.data //获得当前行数据
+        ,layEvent = obj.event; //获得 lay-event 对应的值
+    if(layEvent === 'detail'){
+      layer.msg('查看操作');
+    } else if(layEvent === 'del'){
+      layer.confirm('真的删除行么', function(index){
+        obj.del(); //删除对应行（tr）的DOM结构
+        layer.close(index);
+        //向服务端发送删除指令
+      });
+    } else if(layEvent === 'edit'){
+      layer.msg('编辑操作');
+    }
+  });
   //阻止IE7以下访问
   if(device.ie && device.ie < 8){
     layer.alert('如果您非得使用 IE 浏览器访问Fly社区，那么请使用 IE8+');
-  }
+  };
   
   layui.focusInsert = function(obj, str){
     var result, val = obj.value;
