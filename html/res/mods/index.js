@@ -27,7 +27,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
 //执行一个 table 实例
   table.render({
     elem: '#demo'
-    ,height: 520
+    ,height: 540
     ,url: '/common/tableTest.json'
     ,title: '用户表'
     ,page: true
