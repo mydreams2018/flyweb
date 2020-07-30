@@ -101,7 +101,7 @@
 
 <div class="layui-container">
   <div class="layui-row layui-col-space15">
-    <div class="layui-col-md8 content detail">
+    <div id="autoScroll8" class="layui-col-md8 content detail">
       <div class="fly-panel detail-box">
         <h1>Fly Template v3.0，基于 layui 的极简社区页面模版</h1>
         <div class="fly-detail-info">
@@ -278,7 +278,7 @@
         </div>
       </div>
     </div>
-    <div class="layui-col-md4">
+    <div id="autoScroll" class="layui-col-md4 layui-hide-991">
       <dl class="fly-panel fly-list-one">
         <dt class="fly-panel-title">本周热议</dt>
         <dd>
@@ -381,6 +381,41 @@ layui.config({
   });
   */
 });
+var currentInnerWidth = window.innerWidth;
+var autoScrollID = document.getElementById("autoScroll");
+    autoScrollID.style.overflow="hidden";
+var autoScroll8ID = document.getElementById("autoScroll8");
+//窗体大不改变事件
+window.onresize=function(event) {
+  currentInnerWidth = window.innerWidth;
+};
+//滚动监听这个不用
+window.onscroll = function (event) {
+  if(currentInnerWidth > 991){
+    if(getScrollTop() > autoScrollID.scrollHeight){
+      if((getScrollTop() + autoScrollID.scrollHeight) > autoScroll8ID.scrollHeight+40){
+        var schght = autoScroll8ID.scrollHeight - autoScrollID.scrollHeight ;
+        autoScrollID.style.marginTop = schght+'px';
+      }else{
+        autoScrollID.style.marginTop = getScrollTop()-60+'px';
+      }
+    }else{
+      autoScrollID.style.marginTop = '0px';
+    }
+  }
+};
+//获得滚动条当前滚动的高度(不包括滚动条的高度)
+function getScrollTop(){
+  var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+  if(document.body){
+    bodyScrollTop = document.body.scrollTop;
+  }
+  if(document.documentElement){
+    documentScrollTop = document.documentElement.scrollTop;
+  }
+  scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+  return scrollTop;
+};
 </script>
 
 </body>

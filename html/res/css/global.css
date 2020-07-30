@@ -509,6 +509,12 @@ body .fly-user-main{position: relative; min-height: 600px;}
 .fly-ad:before{content: '广告位'; position: absolute; z-index: 0; top: 50%; left: 50%; left: 50%; margin: -10px 0 0 -25px; color: #aaa; font-size: 18px; font-weight: 300;}
 .fly-ad div{position: relative; z-index: 1;}
 
+@media screen and (max-width: 991px) {
+  .layui-hide-991 {
+    display: none!important
+  }
+}
+
 /* 友链 */
 .fly-link dd{display: inline-block; vertical-align: top;}
 .fly-link a{line-height: 24px; padding-right: 15px;}
