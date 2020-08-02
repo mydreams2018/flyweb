@@ -121,7 +121,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
             options.error && options.error();
           }
         }, error: function(e){
-          layer.msg('请求异常，请重试', {shift: 6});
+          layer.msg('请求异常,请重试', {shift: 6});
           options.error && options.error(e);
         }
       });
@@ -596,22 +596,43 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
 
   //表单提交
   form.on('submit(*)', function(data){
-    var action = $(data.form).attr('action'), button = $(data.elem);
-    fly.json(action, data.field, function(res){
-      var end = function(){
-        if(res.action){
+    var action = $(data.form).attr('action');
+    // fly.json(action, data.field, function(res){
+    //   var end = function(){
+    //     if(res.action){
+    //       location.href = res.action;
+    //     } else {
+    //       fly.form[action||button.attr('key')](data.field, data.form);
+    //     }
+    //   };
+    //   if(res.status == 0){
+    //     button.attr('alert') ? layer.alert(res.msg, {
+    //       icon: 1,
+    //       time: 10*1000,
+    //       end: end
+    //     }) : end();
+    //   };
+    // });
+    if(data.field.password != data.field.repassword){
+       layer.msg("二次密码不一致" ,{shift: 6});
+       return false;
+    };
+    $.ajax({
+      type: 'post',
+      data: new FormData(data.form),
+      contentType: false,
+      processData: false,
+      url: action,
+      success: function(res){
+        if(res.status == 0) {
           location.href = res.action;
         } else {
-          fly.form[action||button.attr('key')](data.field, data.form);
+          layer.msg(res.msg ,{shift: 6});
+          getImageBase(res.id);
         }
-      };
-      if(res.status == 0){
-        button.attr('alert') ? layer.alert(res.msg, {
-          icon: 1,
-          time: 10*1000,
-          end: end
-        }) : end();
-      };
+      }, error: function(e){
+        layer.msg('请求异常,请重试', {shift: 6});
+      }
     });
     return false;
   });
@@ -665,6 +686,19 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       }
     }
   });
+
+  function getImageBase(id){
+    layui.$.ajax({
+      url: "/api/image",
+      type: "get",
+      success: function (data) {
+        layui.$("#"+id).text(data);
+      },
+      error: function () {
+        layui.$("#"+id).text("验证异常");
+      }
+    });
+  };
 
   exports('fly', fly);
 
