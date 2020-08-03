@@ -613,9 +613,11 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     //     }) : end();
     //   };
     // });
-    if(data.field.password != data.field.repassword){
-       layer.msg("二次密码不一致" ,{shift: 6});
-       return false;
+    if(data.field.repassword){
+      if(data.field.password != data.field.repassword){
+        layer.msg("二次密码不一致" ,{shift: 6});
+        return false;
+      }
     };
     $.ajax({
       type: 'post',
@@ -625,12 +627,14 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       url: action,
       success: function(res){
         if(res.status == 0) {
-          location.href = res.action;
+          if(res.action){
+            location.href = res.action;
+          }
         } else {
           layer.msg(res.msg ,{shift: 6});
           getImageBase(res.id);
         }
-      }, error: function(e){
+      },error: function(e){
         layer.msg('请求异常,请重试', {shift: 6});
       }
     });

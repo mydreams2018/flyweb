@@ -60,32 +60,43 @@
       <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
           <div class="layui-form layui-form-pane">
-            <form method="post">
+            <form action="/api/defaultLogin" method="post">
               <div class="layui-form-item">
-                <label for="L_email" class="layui-form-label">邮箱</label>
+                <label for="L_email" class="layui-form-label">用户</label>
                 <div class="layui-input-inline">
-                  <input type="text" id="L_email" name="email" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="text" id="L_email" name="username" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
                 <label for="L_pass" class="layui-form-label">密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="L_pass" name="pass" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="password" id="L_pass" name="password" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
                 <label for="L_vercode" class="layui-form-label">人类验证</label>
                 <div class="layui-input-inline">
-                  <input type="text" id="L_vercode" name="vercode" required lay-verify="required" placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
+                  <input type="number" id="L_vercode" name="image_code" required lay-verify="required" placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid">
-                  <span style="color: #c00;">{{d.vercode}}</span>
+                  <span id="imgCode" style="color: #c00;"></span>
                 </div>
               </div>
+
+              <div class="layui-form-item">
+                <label for="rememberMe" class="layui-form-label">记住我</label>
+                <div class="layui-input-inline">
+                  <input type="checkbox" id="rememberMe" name="remember-me" title="保存">
+                </div>
+                <div class="layui-form-mid">
+                  <span>不要在公共地方使用此功能</span>
+                </div>
+              </div>
+
               <div class="layui-form-item">
                 <button class="layui-btn" lay-filter="*" lay-submit>立即登录</button>
                 <span style="padding-left:20px;">
-                  <a href="forget.html">忘记密码？</a>
+                  <a href="/user/forget.html">忘记密码？</a>
                 </span>
               </div>
               <div class="layui-form-item fly-form-app">
@@ -125,7 +136,18 @@ layui.config({
   ,base: '/res/mods/'
 }).extend({
   fly: 'index'
-}).use('fly');
+}).use('fly',function () {
+  layui.$.ajax({
+    url: "/api/image",
+    type: "get",
+    success: function (data) {
+      layui.$("#imgCode").text(data);
+    },
+    error: function () {
+      layui.$("#imgCode").text("验证异常");
+    }
+  })
+});
 </script>
 
 </body>
