@@ -20,21 +20,18 @@ layui.define('fly', function(exports){
   };
 
   //监听专栏选择
-  form.on('select(column)', function(obj){
+  form.on('select(column)',function(obj){
     var value = obj.value
-    ,elemQuiz = $('#LAY_quiz')
     ,tips = {
       tips: 1
       ,maxWidth: 250
-      ,time: 10000
+      ,time: 30
     };
-    elemQuiz.addClass('layui-hide');
-    if(value === '0'){
-      layer.tips('下面的信息将便于您获得更好的答案', obj.othis, tips);
-      elemQuiz.removeClass('layui-hide');
-    } else if(value === '99'){
-      layer.tips('系统会对【分享】类型的帖子予以飞吻奖励，但我们需要审核，通过后方可展示', obj.othis, tips);
+    for(var x=1;x<5;x++){
+      $('#dataType'+x).addClass('layui-hide');
     }
+    $('#dataType'+value).removeClass('layui-hide');
+    layer.tips('你已选择', obj.othis, tips);
   });
 
   //提交回答

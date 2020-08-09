@@ -597,22 +597,34 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
   //表单提交
   form.on('submit(*)', function(data){
     var action = $(data.form).attr('action');
-    // fly.json(action, data.field, function(res){
-    //   var end = function(){
-    //     if(res.action){
-    //       location.href = res.action;
-    //     } else {
-    //       fly.form[action||button.attr('key')](data.field, data.form);
-    //     }
-    //   };
-    //   if(res.status == 0){
-    //     button.attr('alert') ? layer.alert(res.msg, {
-    //       icon: 1,
-    //       time: 10*1000,
-    //       end: end
-    //     }) : end();
-    //   };
-    // });
+    if(action =='/api/reportBack/insert'){
+      //发送贴子json格式传输
+      var inx = data.field.classId;
+      data.field.datatype = data.field['cusType'+inx];
+      data.field.dataversion = data.field['cusVersion'+inx];
+      data.field.useides = data.field['useides'+inx];
+      data.field.name = data.field['title'];
+      data.field.id = data.field['dataid'];
+      $.ajax({
+        type: 'post',
+        dataType: "json",
+        data: data.field,
+        url: action,
+        success: function(res){
+          if(res.status == 0) {
+            if(res.action){
+              location.href = res.action;
+            }
+          } else {
+            layer.msg(res.msg ,{shift: 6});
+            getImageBase(res.id);
+          }
+        },error: function(e){
+          layer.msg('请求异常,请重试', {shift: 6});
+        }
+      });
+      return false;
+    };
     if(data.field.repassword){
       if(data.field.password != data.field.repassword){
         layer.msg("二次密码不一致" ,{shift: 6});
@@ -621,9 +633,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     };
     $.ajax({
       type: 'post',
-      data: new FormData(data.form),
-      contentType: false,
-      processData: false,
+      dataType: "json",
+      data: data.field,
       url: action,
       success: function(res){
         if(res.status == 0) {

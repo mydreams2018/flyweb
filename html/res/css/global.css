@@ -527,6 +527,33 @@ body .fly-user-main{position: relative; min-height: 600px;}
 .fly-list-one .fly-none{min-height: 70px;}
 
 
+.customType{
+  display: inline-block;
+}
+.customOut{
+  overflow: hidden;
+  padding-left: 15px;
+  padding-right: 15px;
+  height: 48px;
+  line-height: 48px;
+  font-size: 14px;
+  border-bottom: 1px dotted #E9E9E9;
+}
+.customLabel{
+  width: 43px;
+  text-align: center;
+}
+.customselect{
+  padding-left: 6px;
+  margin-left: 10px;
+  width: 100px;
+  border: 0;
+  text-align: center;
+  border-left: 1px dotted #E9E9E9;
+  white-space: nowrap;
+}
+
+
 @media screen and (max-width: 768px) {
 	.fly-main{width: 100%;}
 
