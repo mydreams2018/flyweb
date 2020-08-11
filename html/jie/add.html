@@ -80,7 +80,7 @@
         </ul>
         <div class="layui-form layui-tab-content" style="padding: 20px 0;">
           <div class="layui-tab-item layui-show">
-            <form action="/api/reportBack/insert" method="post">
+            <form action="/api/report/insert" method="post">
               <div class="layui-row layui-col-space15 layui-form-item">
                 <div class="layui-col-md3">
                   <label class="layui-form-label">所在专栏</label>
@@ -272,6 +272,7 @@
 
 <script src="/res/layui/layui.js"></script>
 <script>
+layui.cache.page = 'jie';
 layui.cache.user = {
   username: '游客'
   ,uid: -1

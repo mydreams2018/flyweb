@@ -201,11 +201,11 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
               //执行上传实例
               upload.render({
                 elem: '#uploadImg'
-                ,url: '/api/upload/'
-                ,size: 200
+                ,url: '/api/uploadImg'
+                ,size: 300
                 ,done: function(res){
                   if(res.status == 0){
-                    image.val(res.url);
+                    image.val(res.action);
                   } else {
                     layer.msg(res.msg, {icon: 5});
                   }
@@ -597,8 +597,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
   //表单提交
   form.on('submit(*)', function(data){
     var action = $(data.form).attr('action');
-    if(action =='/api/reportBack/insert'){
-      //发送贴子json格式传输
+    if(action =='/api/report/insert'){
       var inx = data.field.classId;
       data.field.datatype = data.field['cusType'+inx];
       data.field.dataversion = data.field['cusVersion'+inx];
