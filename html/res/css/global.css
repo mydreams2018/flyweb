@@ -526,31 +526,9 @@ body .fly-user-main{position: relative; min-height: 600px;}
 .fly-none p{margin-top: 50px; padding: 0 15px; font-size: 20px; color: #999; font-weight: 300;}
 .fly-list-one .fly-none{min-height: 70px;}
 
-
-.customType{
-  display: inline-block;
-}
-.customOut{
-  overflow: hidden;
-  padding-left: 15px;
-  padding-right: 15px;
-  height: 48px;
-  line-height: 48px;
-  font-size: 14px;
-  border-bottom: 1px dotted #E9E9E9;
-}
-.customLabel{
-  width: 43px;
-  text-align: center;
-}
 .customselect{
-  padding-left: 6px;
-  margin-left: 10px;
-  width: 100px;
+  width: 70px;
   border: 0;
-  text-align: center;
-  border-left: 1px dotted #E9E9E9;
-  white-space: nowrap;
 }
 
 

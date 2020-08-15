@@ -150,6 +150,7 @@ layui.define('fly', function(exports){
       });
     }
     ,reply: function(li){ //回复
+      console.log($(li[0]).attr('data-id'));
       var val = dom.content.val();
       var aite = '@'+ li.find('.fly-detail-user cite').text().replace(/\s/g, '');
       dom.content.focus()
