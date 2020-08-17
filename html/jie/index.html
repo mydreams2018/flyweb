@@ -133,7 +133,12 @@
          <div id="back_portNone" class="fly-none">没有相关数据</div>
     
         <div style="text-align: center">
-          <div class="laypage-main"><span class="laypage-curr">1</span><a href="/jie/page/2/">2</a><a href="/jie/page/3/">3</a><a href="/jie/page/4/">4</a><a href="/jie/page/5/">5</a><span>…</span><a href="/jie/page/148/" class="laypage-last" title="尾页">尾页</a><a href="/jie/page/2/" class="laypage-next">下一页</a>
+          <div class="laypage-main">
+            <a id="homePaging" href="javascript:changePaging('homePaging')" data-id="1">首页</a>
+            <a id="lastPaging" href="javascript:changePaging('lastPaging')">上一页</a>
+            <a id="nextPaging" href="javascript:changePaging('nextPaging')" >下一页</a>
+            <a id="endPaging" href="javascript:changePaging('endPaging')" >尾页</a>
+            <a id="curPaging" title="当前页" href="javascript:changePaging('curPaging')"></a>
           </div>
         </div>
 
@@ -141,7 +146,7 @@
     </div>
     <div class="layui-col-md4">
       <dl class="fly-panel fly-list-one">
-        <dt class="fly-panel-title">本周热议</dt>
+        <dt class="fly-panel-title">置顶</dt>
         <dd>
           <a href="">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
@@ -227,6 +232,7 @@
   var portState;
   var isEssence;
   var orderType = 'create_time';
+  var currentPage = 1;
 layui.cache.page = 'jie';
 layui.cache.user = {
   username: '游客'
@@ -245,6 +251,7 @@ layui.config({
 });
 function selectType(obj){
   datatype=obj.value;
+  getPortData();
 };
 function changeState(value){
   layui.$("#all_data").removeClass('layui-this');
@@ -264,6 +271,7 @@ function changeState(value){
     case '精华':
       isEssence=1;
   };
+  getPortData();
 };
 function changeOrder(value) {
   layui.$("#order_time").removeClass('layui-this');
@@ -277,6 +285,13 @@ function changeOrder(value) {
       layui.$("#order_reply").addClass('layui-this');
       break;
   };
+  getPortData();
+};
+function changePaging(obj){
+  if(document.getElementById(obj).getAttribute("data-id") != currentPage) {
+    currentPage = document.getElementById(obj).getAttribute("data-id");
+    getPortData();
+  }
 };
 function getPortData(){
   layui.$.ajax({
@@ -288,6 +303,7 @@ function getPortData(){
       'portState':portState,
       'isEssence':isEssence,
       'orderType':orderType,
+      'currentPage':currentPage,
       'classId':1
     },
     success: function (res) {
@@ -348,6 +364,11 @@ function getPortData(){
                     .replace(/{portState}/g,resData.portState).replace(/{replyNumber}/g,resData.replyNumber);
                     document.getElementById("back_portData").appendChild(layui.$(rt)[0]);
           }
+          document.getElementById("lastPaging").setAttribute("data-id",res.page.lastPage);
+          document.getElementById("nextPaging").setAttribute("data-id",res.page.nextPage);
+          document.getElementById("endPaging").setAttribute("data-id",res.page.endPage);
+          document.getElementById("curPaging").innerText=res.page.currentPage+'/'+res.page.endPage;
+          currentPage = res.page.currentPage;
         }else{
           layui.$("#back_portNone").removeClass('layui-hide');
           layui.$("#back_portData").addClass('layui-hide');
