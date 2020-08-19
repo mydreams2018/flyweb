@@ -138,60 +138,15 @@
             <a id="lastPaging" href="javascript:changePaging('lastPaging')">上一页</a>
             <a id="nextPaging" href="javascript:changePaging('nextPaging')" >下一页</a>
             <a id="endPaging" href="javascript:changePaging('endPaging')" >尾页</a>
-            <a id="curPaging" title="当前页" href="javascript:changePaging('curPaging')"></a>
+            <a id="curPaging" title="当前页" href="javascript:changePaging('curPaging')">0</a>
           </div>
         </div>
 
       </div>
     </div>
     <div class="layui-col-md4">
-      <dl class="fly-panel fly-list-one">
+      <dl class="fly-panel fly-list-one" id="initTop">
         <dt class="fly-panel-title">置顶</dt>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-
-        <!-- 无数据时 -->
-        <!--
-        <div class="fly-none">没有相关数据</div>
-        -->
       </dl>
 
       <div class="fly-panel">
@@ -248,6 +203,7 @@ layui.config({
   fly: 'index'
 }).use('fly',function(){
   getPortData();
+  initTopData();
 });
 function selectType(obj){
   datatype=obj.value;
@@ -358,7 +314,7 @@ function getPortData(){
                     };
                     str = str +  "</li>";
                     var rt = str.replace(/{userAccount}/g,resData.userAccount).replace(/{userImg}/g,resData.userImg).replace(/{userAlias}/g,resData.alias)
-                    .replace(/{portTitle}/g,resData.name).replace(/{portTitle}/g,resData.name).replace(/{portId}/g,resData.id)
+                    .replace(/{portTitle}/g,resData.name).replace(/{portId}/g,resData.id)
                     .replace(/{authenticate}/g,resData.authenticate).replace(/{vipLevel}/g,resData.vipLevel)
                     .replace(/{createTime}/g,resData.createTime).replace(/{experience}/g,resData.experience)
                     .replace(/{portState}/g,resData.portState).replace(/{replyNumber}/g,resData.replyNumber);
@@ -379,6 +335,36 @@ function getPortData(){
       layui.$("#back_portData").addClass('layui-hide');
     }
   });
+};
+function initTopData() {
+  layui.$.ajax({
+    url: "/api/report/queryReport",
+    type: "post",
+    dataType: "json",
+    data: {
+      'isTop':1,
+      'orderType':orderType,
+      'classId':1
+    },
+    error: function (res) {
+      document.getElementById("initTop").appendChild(layui.$("<div class=\"fly-none\">没有相关数据</div>")[0]);
+    },
+    success: function (res) {
+      if(res && res.datas.length > 0){
+        var str ="      <dd>\n" +
+                "          <a href=\"/jie/detail.html?classId=1&id={portId}\">{portTitle}</a>\n" +
+                "          <span><i class=\"iconfont icon-pinglun1\"></i> {replyNumber}</span>\n" +
+                "        </dd>";
+        for(var x=0;x<res.datas.length;x++){
+          var resData = res.datas[x];
+          var rt = str.replace(/{portTitle}/g,resData.name).replace(/{portId}/g,resData.id).replace(/{replyNumber}/g,resData.replyNumber);
+          document.getElementById("initTop").appendChild(layui.$(rt)[0]);
+        }
+      }else{
+        document.getElementById("initTop").appendChild(layui.$("<div class=\"fly-none\">没有相关数据</div>")[0]);
+      }
+    }
+  })
 };
 </script>
 
