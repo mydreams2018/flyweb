@@ -1,5 +1,3 @@
- 
- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,43 +28,24 @@
       </li>
     </ul>
     
-    <ul class="layui-nav fly-nav-user">
-      
-      <!-- 未登入的状态 -->
-      <li class="layui-nav-item">
-        <a class="iconfont icon-touxiang layui-hide-xs" href="/user/login.html"></a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="/user/login.html">登入</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="/user/reg.html">注册</a>
-      </li>
-      <li class="layui-nav-item layui-hide-xs">
-        <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
-      </li>
-      <li class="layui-nav-item layui-hide-xs">
-        <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
-      </li>
-      
-      <!-- 登入后的状态 -->
-      <!--
+    <ul class="layui-nav fly-nav-user" id="current-account">
+
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">贤心</cite>
-          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+          <cite class="layui-hide-xs" id="userAlias"></cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" id="authenticate"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs" id="vipLevel"></i>
+          <img id="userImg">
         </a>
         <dl class="layui-nav-child">
           <dd><a href="/user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="/user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="/user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="/user/cleanAll.html" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
-      -->
+
     </ul>
   </div>
 </div>
@@ -84,8 +63,8 @@
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
       
       <!-- 用户登入后显示 -->
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="../user/index.html">我发表的贴</a></li> 
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="../user/index.html#collection">我收藏的贴</a></li> 
+      <li id="mysend-port" class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/user/index.html#index">我发表的贴</a></li>
+      <li id="myfavorites-port" class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/user/index.html#collection">我收藏的贴</a></li>
     </ul> 
     
     <div class="fly-column-right layui-hide-xs"> 
@@ -189,19 +168,17 @@
   var orderType = 'create_time';
   var currentPage = 1;
 layui.cache.page = 'jie';
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '/res/images/avatar/00.jpg'
-  ,experience: 83
-  ,sex: '男'
-};
 layui.config({
   version: "3.0.0"
   ,base: '/res/mods/'
 }).extend({
+  account: 'currentAccount',
   fly: 'index'
-}).use('fly',function(){
+}).use(['account','fly'],function(){
+  if(layui.cache.user.state != 1){
+    layui.$("#mysend-port").remove();
+    layui.$("#myfavorites-port").remove();
+  };
   getPortData();
   initTopData();
 });
@@ -281,12 +258,8 @@ function getPortData(){
                     "            <div class=\"fly-list-info\">\n" +
                     "              <a href=\"/user/home.html?account={userAccount}\" link>\n" +
                     "                <cite>{userAlias}</cite>\n";
-                     if(resData.authenticate && resData.authenticate !=''){
-                       str = str + "<i class=\"iconfont icon-renzheng\" title=\"认证信息：{authenticate}\"></i>\n"
-                     };
-                    if(resData.isVip){
-                      str = str + "<i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>\n"
-                    };
+                    str = str + "<i class=\"iconfont icon-renzheng\" title=\"认证信息：{authenticate}\"></i>\n";
+                    str = str + "<i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>\n";
                     str = str + "  </a>\n"
                             + "   <span>{createTime}</span>\n"
                             + "  \n"
@@ -297,25 +270,25 @@ function getPortData(){
                             +  "    </span>\n"
                             + " </div>\n";
                     if(resData.isTop || resData.isEssence){
-                        if(resData.isTop){
-                            str = str + "<div class=\"fly-list-badge\">\n" +
-                                    "              <span class=\"layui-badge layui-bg-black\">置顶</span>\n" +
-                                    "            </div>";
+                        if(resData.isTop && resData.isEssence){
+                          str = str + " <div class=\"fly-list-badge\">\n" +
+                                  "              <span class=\"layui-badge layui-bg-black\">置顶</span>\n" +
+                                  "              <span class=\"layui-badge layui-bg-red\">精帖</span>\n" +
+                                  "            </div>";
                         }else if(resData.isEssence){
                           str = str + "  <div class=\"fly-list-badge\">\n" +
                                    "           <span class=\"layui-badge layui-bg-red\">精帖</span>\n" +
                                    "            </div>";
                         }else{
-                          str = str + " <div class=\"fly-list-badge\">\n" +
+                          str = str + "<div class=\"fly-list-badge\">\n" +
                                   "              <span class=\"layui-badge layui-bg-black\">置顶</span>\n" +
-                                  "              <span class=\"layui-badge layui-bg-red\">精帖</span>\n" +
                                   "            </div>";
                         }
                     };
                     str = str +  "</li>";
                     var rt = str.replace(/{userAccount}/g,resData.userAccount).replace(/{userImg}/g,resData.userImg).replace(/{userAlias}/g,resData.alias)
                     .replace(/{portTitle}/g,resData.name).replace(/{portId}/g,resData.id)
-                    .replace(/{authenticate}/g,resData.authenticate).replace(/{vipLevel}/g,resData.vipLevel)
+                    .replace(/{authenticate}/g,resData.authenticate?resData.authenticate:'无').replace(/{vipLevel}/g,resData.vipLevel)
                     .replace(/{createTime}/g,resData.createTime).replace(/{experience}/g,resData.experience)
                     .replace(/{portState}/g,resData.portState).replace(/{replyNumber}/g,resData.replyNumber);
                     document.getElementById("back_portData").appendChild(layui.$(rt)[0]);

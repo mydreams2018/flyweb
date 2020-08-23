@@ -30,43 +30,24 @@
       </li>
     </ul>
     
-    <ul class="layui-nav fly-nav-user">
-      
-      <!-- 未登入的状态 -->
-      <!--
-      <li class="layui-nav-item">
-        <a class="iconfont icon-touxiang layui-hide-xs" href="/user/login.html"></a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="/user/login.html">登入</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="/user/reg.html">注册</a>
-      </li>
-      <li class="layui-nav-item layui-hide-xs">
-        <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
-      </li>
-      <li class="layui-nav-item layui-hide-xs">
-        <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
-      </li>
-       -->
-      
-      <!-- 登入后的状态 -->
+    <ul class="layui-nav fly-nav-user" id="current-account">
+
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">贤心</cite>
-          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+          <cite class="layui-hide-xs" id="userAlias"></cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" id="authenticate"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs" id="vipLevel"></i>
+          <img id="userImg">
         </a>
         <dl class="layui-nav-child">
           <dd><a href="/user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="/user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="/user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="/user/cleanAll.html" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
+
     </ul>
   </div>
 </div>
@@ -76,7 +57,7 @@
     <div class="layui-container">
       <ul class="layui-clear">
         <li class="layui-hide-xs"><a href="/">首页</a></li> 
-        <li class="layui-this"><a href="">后端</a></li>
+        <li class="layui-this"><a href="/jie/index.html">后端</a></li>
         <li><a href="">前端</a></li>
         <li><a href="">数据</a></li>
         <li><a href="">综合</a></li>
@@ -85,8 +66,8 @@
         <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
         
         <!-- 用户登入后显示 -->
-        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/user/index.html">我发表的贴</a></li>
-        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/user/index.html#collection">我收藏的贴</a></li>
+        <li id="mysend-port" class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/user/index.html">我发表的贴</a></li>
+        <li id="myfavorites-port" class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/user/index.html#collection">我收藏的贴</a></li>
       </ul> 
       
       <div class="fly-column-right layui-hide-xs">
@@ -106,23 +87,25 @@
         <h1>Fly Template v3.0，基于 layui 的极简社区页面模版</h1>
         <div class="fly-detail-info">
           <!-- <span class="layui-badge">审核中</span> -->
-          <span class="layui-badge layui-bg-green fly-detail-column">动态</span>
+<!--          <span class="layui-badge layui-bg-green fly-detail-column">动态</span>-->
           
           <span class="layui-badge" style="background-color: #999;">未结</span>
           <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->
           
           <span class="layui-badge layui-bg-black">置顶</span>
           <span class="layui-badge layui-bg-red">精帖</span>
-          
+
+          <!--  在表格处操作
           <div class="fly-admin-box" data-id="123">
             <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>
-            
-            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span> 
-            <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span> -->
-            
-            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span> 
-            <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
-          </div>
+
+            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>
+             <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span>
+
+            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span>
+             <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span>
+          </div>  -->
+
           <span class="fly-list-nums"> 
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> 66</a>
             <i class="iconfont" title="人气">&#xe60b;</i> 99999
@@ -357,20 +340,70 @@
 
 <script src="/res/layui/layui.js"></script>
 <script>
+  var UrlParm = function () {
+    var data, index;
+    (function init() {
+      data = [];
+      index = {};
+      var u = window.location.search.substr(1);
+      if (u != '') {
+        var parms = decodeURIComponent(u).split('&');
+        for (var i = 0, len = parms.length; i < len; i++) {
+          if (parms[i] != '') {
+            var p = parms[i].split("=");
+            if (p.length == 1 || (p.length == 2 && p[1] == '')) {
+              data.push(['']);
+              index[p[0]] = data.length - 1;
+            } else if (typeof (p[0]) == 'undefined' || p[0] == '') {
+              data[0] = [p[1]];
+            } else if (typeof (index[p[0]]) == 'undefined') {
+              data.push([p[1]]);
+              index[p[0]] = data.length - 1;
+            } else {
+              data[index[p[0]]].push(p[1]);
+            }
+          }
+        }
+      }
+    })();
+    return {
+      parm: function (o) {
+        try {
+          return (typeof (o) == 'number' ? data[o][0] : data[index[o]][0]);
+        } catch (e) {
+        }
+      },
+      parmValues: function (o) {
+        try {
+          return (typeof (o) == 'number' ? data[o] : data[index[o]]);
+        } catch (e) { }
+      },
+      hasParm: function (parmName) {
+        return typeof (parmName) == 'string' ? typeof (index[parmName]) != 'undefined' : false;
+      },
+      parmMap: function () {
+        var map = {};
+        try {
+          for (var p in index) { map[p] = data[index[p]]; }
+        } catch (e) { }
+        return map;
+      }
+    }
+  } ();
+console.log(UrlParm.parm('idd'));
+
 layui.cache.page = 'jie';
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '/res/images/avatar/00.jpg'
-  ,experience: 83
-  ,sex: '男'
-};
 layui.config({
   version: "3.0.0"
   ,base: '/res/mods/'
 }).extend({
+  account: 'currentAccount',
   fly: 'index'
-}).use(['fly', 'face'], function(){
+}).use(['account', 'fly', 'face'], function(){
+  if(layui.cache.user.state != 1){
+    layui.$("#mysend-port").remove();
+    layui.$("#myfavorites-port").remove();
+  };
   var $ = layui.$
   ,fly = layui.fly;
   //如果你是采用模版自带的编辑器，你需要开启以下语句来解析。

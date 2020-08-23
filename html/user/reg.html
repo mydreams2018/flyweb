@@ -29,23 +29,25 @@
       </li>
     </ul>
     
-    <ul class="layui-nav fly-nav-user">
-      <!-- 未登入的状态 -->
+    <ul class="layui-nav fly-nav-user" id="current-account">
+
       <li class="layui-nav-item">
-        <a class="iconfont icon-touxiang layui-hide-xs" href="/user/login.html"></a>
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs" id="userAlias"></cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" id="authenticate"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs" id="vipLevel"></i>
+          <img id="userImg">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="/user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="/user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="/user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="/user/cleanAll.html" style="text-align: center;">退出</a></dd>
+        </dl>
       </li>
-      <li class="layui-nav-item">
-        <a href="/user/login.html">登入</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="/user/reg.html">注册</a>
-      </li>
-      <li class="layui-nav-item layui-hide-xs">
-        <a href="/api/auth/qq" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
-      </li>
-      <li class="layui-nav-item layui-hide-xs">
-        <a href="/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
-      </li>
+
+
     </ul>
   </div>
 </div>
@@ -102,7 +104,7 @@
               <div class="layui-form-item fly-form-app">
                 <span>或者直接使用社交账号快捷注册</span>
                 <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
-                <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
+                <a href="#" onclick="layer.msg('还在开发中', {icon:16, shade: 0.1, time:2000})" class="iconfont icon-weibo" title="微博登入"></a>
               </div>
             </form>
           </div>
@@ -124,19 +126,13 @@
 
 <script src="/res/layui/layui.js"></script>
 <script>
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '/res/images/avatar/00.jpg'
-  ,experience: 83
-  ,sex: '男'
-};
 layui.config({
   version: "3.0.0"
   ,base: '/res/mods/'
 }).extend({
+  account: 'currentAccount',
   fly: 'index'
-}).use('fly',function () {
+}).use(['account','fly'],function () {
   layui.$.ajax({
     url: "/api/image",
     type: "get",

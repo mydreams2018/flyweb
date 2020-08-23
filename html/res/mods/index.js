@@ -44,7 +44,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       ,{field: 'sign', title: '签名', width: 200}
       ,{field: 'classify', title: '职业', width: 100}
       ,{field: 'wealth', title: '财富', width: 135, sort: true, totalRow: true}
-      ,{fixed: 'right', title: '操作',width: 165, align:'center', toolbar: '#barDemo'}
+      ,{fixed: 'right', title: '操作',width: 260, align:'center', toolbar: '#barDemo'}
     ]]
   });
   //监听行工具事件
@@ -324,30 +324,31 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     //新消息通知
     ,newmsg: function(){
       var elemUser = $('.fly-nav-user');
-      if(layui.cache.user.uid !== -1 && elemUser[0]){
-        fly.json('/message/nums/', {
-          _: new Date().getTime()
-        }, function(res){
-          if(res.status === 0 && res.count > 0){
-            var msg = $('<a class="fly-nav-msg" href="javascript:;">'+ res.count +'</a>');
-            elemUser.append(msg);
-            msg.on('click', function(){
-              fly.json('/message/read', {}, function(res){
-                if(res.status === 0){
-                  location.href = '/user/message/';
-                }
-              });
-            });
-            layer.tips('你有 '+ res.count +' 条未读消息', msg, {
-              tips: 3
-              ,tipsMore: true
-              ,fixed: true
-            });
-            msg.on('mouseenter', function(){
-              layer.closeAll('tips');
-            })
-          }
-        });
+      if(layui.cache.user.state == 1 && elemUser[0]){
+        console.log(layui.cache.user.account);
+        // fly.json('/message/nums/', {
+        //   _: new Date().getTime()
+        // }, function(res){
+        //   if(res.status === 0 && res.count > 0){
+        //     var msg = $('<a class="fly-nav-msg" href="javascript:;">'+ res.count +'</a>');
+        //     elemUser.append(msg);
+        //     msg.on('click', function(){
+        //       fly.json('/message/read', {}, function(res){
+        //         if(res.status === 0){
+        //           location.href = '/user/message/';
+        //         }
+        //       });
+        //     });
+        //     layer.tips('你有 '+ res.count +' 条未读消息', msg, {
+        //       tips: 3
+        //       ,tipsMore: true
+        //       ,fixed: true
+        //     });
+        //     msg.on('mouseenter', function(){
+        //       layer.closeAll('tips');
+        //     })
+        //   }
+        // });
       }
       return arguments.callee;
     }
@@ -604,6 +605,10 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       data.field.useides = data.field['useides'+inx];
       data.field.name = data.field['title'];
       data.field.id = data.field['dataid'];
+      if(data.field.experience > layui.cache.user.accumulatePoints){
+        layer.msg('飞吻数据不足', {shift: 6});
+        return false;
+      };
       $.ajax({
         type: 'post',
         dataType: "json",

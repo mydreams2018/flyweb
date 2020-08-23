@@ -38,12 +38,12 @@ layui.define('fly', function(exports){
   fly.form['/jie/reply/'] = function(data, required){
     var tpl = '<li>\
       <div class="detail-about detail-about-reply">\
-        <a class="fly-avatar" href="/u/{{ layui.cache.user.uid }}" target="_blank">\
-          <img src="{{= d.user.avatar}}" alt="{{= d.user.username}}">\
+        <a class="fly-avatar" href="/u/{{ layui.cache.user.state }}" target="_blank">\
+          <img src="{{= d.user.img}}" alt="{{= d.user.alias}}">\
         </a>\
         <div class="fly-detail-user">\
-          <a href="/u/{{ layui.cache.user.uid }}" target="_blank" class="fly-link">\
-            <cite>{{d.user.username}}</cite>\
+          <a href="/u/{{ layui.cache.user.state }}" target="_blank" class="fly-link">\
+            <cite>{{d.user.alias}}</cite>\
           </a>\
         </div>\
         <div class="detail-hits">\
@@ -123,12 +123,12 @@ layui.define('fly', function(exports){
   var asyncRender = function(){
     var div = $('.fly-admin-box'), jieAdmin = $('#LAY_jieAdmin');
     //查询帖子是否收藏
-    if(jieAdmin[0] && layui.cache.user.uid != -1){
-      fly.json('/collection/find/', {
-        cid: div.data('id')
-      }, function(res){
-        jieAdmin.append('<span class="layui-btn layui-btn-xs jie-admin '+ (res.data.collection ? 'layui-btn-danger' : '') +'" type="collect" data-type="'+ (res.data.collection ? 'remove' : 'add') +'">'+ (res.data.collection ? '取消收藏' : '收藏') +'</span>');
-      });
+    if(jieAdmin[0] && layui.cache.user.state == 1){
+      // fly.json('/collection/find/', {
+      //   cid: div.data('id')
+      // }, function(res){
+      //   jieAdmin.append('<span class="layui-btn layui-btn-xs jie-admin '+ (res.data.collection ? 'layui-btn-danger' : '') +'" type="collect" data-type="'+ (res.data.collection ? 'remove' : 'add') +'">'+ (res.data.collection ? '取消收藏' : '收藏') +'</span>');
+      // });
     }
   }();
 
