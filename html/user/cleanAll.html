@@ -80,7 +80,7 @@
 	<div class="fly-panel">
 	  <div class="fly-none">
 	    <h2><i class="iconfont icon-tishilian"></i></h2>
-      <p>这是一个基于 layui 的极简通用型社区页面模版</p>
+      <p>您已经退出!</p>
 	  </div>
 	</div>
 </div>
@@ -100,9 +100,15 @@ layui.config({
   version: "3.0.0"
   ,base: '/res/mods/'
 }).extend({
+  exit: 'exitUser',
   account: 'currentAccount',
   fly: 'index'
-}).use(['account','fly']);
+}).use(['exit','account','fly'],function () {
+  if(layui.cache.user.state != 1){
+    layui.$("#mysend-port").remove();
+    layui.$("#myfavorites-port").remove();
+  };
+});
 </script>
 
 </body>
