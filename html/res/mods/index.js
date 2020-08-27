@@ -44,7 +44,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       ,{field: 'sign', title: '签名', width: 200}
       ,{field: 'classify', title: '职业', width: 100}
       ,{field: 'wealth', title: '财富', width: 135, sort: true, totalRow: true}
-      ,{fixed: 'right', title: '操作',width: 260, align:'center', toolbar: '#barDemo'}
+      ,{fixed: 'right', title: '操作',width: 180, align:'center', toolbar: '#barDemo'}
     ]]
   });
   //监听行工具事件
