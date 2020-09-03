@@ -36,12 +36,12 @@ layui.define('jquery', function(exports){
           $("#userImg").attr('src',data.img);
       }else{
           $('#current-account').empty();
-          document.getElementById("current-account").innerHTML=str;
+          $("#current-account").html(str);
       }
     },
     error: function () {
         $('#current-account').empty();
-        document.getElementById("current-account").innerHTML=str;
+        $("#current-account").html(str);
     }
   });
   exports('account', null);
