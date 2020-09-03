@@ -74,6 +74,7 @@ layui.define(['jquery','layer'], function(exports){
     $.ajax({
         url: "/api/report/selectByPrimaryKey",
         type: "post",
+        dataType: "json",
         data: {
             "classId":classIddata,
             "id": UrlParm.parm('id')
@@ -124,16 +125,33 @@ layui.define(['jquery','layer'], function(exports){
                     $("#editPort").remove();
                 };
                 $("#detailBody").html(contentMy(data.details.detailsText));
+                getPortDetails();
             }else{
-                layer.msg("数据请求出错", {shift: 6});
+                window.location.href='/404.html';
             }
         },
         error: function (data) {
-            layer.msg('数据请求出错', {shift: 6});
+            window.location.href='/404.html';
         }
     });
 
+    function getPortDetails() {
+        $.ajax({
+            url: "/api/detailsText/queryDetails",
+            type: "post",
+            dataType: "json",
+            data: {
+                "classId": classIddata,
+                "portId": UrlParm.parm('id')
+            },
+            success: function (data) {
 
+            },
+            error: function (data) {
+
+            }
+        });
+    };
     function escapeMY(html){
         return String(html||'').replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
             .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
@@ -159,7 +177,6 @@ layui.define(['jquery','layer'], function(exports){
             .replace(/\n/g, '<br>') //转义换行
         return content;
     };
-
 
     exports('details', null);
 });

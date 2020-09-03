@@ -95,6 +95,7 @@
       </div>
 
       <div class="fly-panel detail-box" id="flyReply">
+
         <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
           <legend>回帖</legend>
         </fieldset>
@@ -114,11 +115,11 @@
                 </a>
                 
                 <span>(楼主)</span>
-                <!--
                 <span style="color:#5FB878">(管理员)</span>
-                <span style="color:#FF9E3F">（社区之光）</span>
-                <span style="color:#999">（该号已被封）</span>
-                -->
+
+<!--                <span style="color:#FF9E3F">(社区之光)</span>-->
+<!--                <span style="color:#999">(该号已被封)</span>-->
+
               </div>
 
               <div class="detail-hits">
@@ -185,7 +186,17 @@
           <!-- 无数据时 -->
           <!-- <li class="fly-none">消灭零回复</li> -->
         </ul>
-        
+
+        <div style="text-align: center">
+          <div class="laypage-main">
+            <a id="homePaging" href="javascript:changePaging('homePaging')" data-id="1">首页</a>
+            <a id="lastPaging" href="javascript:changePaging('lastPaging')">上一页</a>
+            <a id="nextPaging" href="javascript:changePaging('nextPaging')" >下一页</a>
+            <a id="endPaging" href="javascript:changePaging('endPaging')" >尾页</a>
+            <a id="curPaging" title="当前页" href="javascript:changePaging('curPaging')">0</a>
+          </div>
+        </div>
+
         <div class="layui-form layui-form-pane">
           <form action="/jie/reply/" method="post">
             <div class="layui-form-item layui-form-text">
