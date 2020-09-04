@@ -71,6 +71,8 @@ layui.define(['jquery','layer'], function(exports){
                 break;
         }
     };
+    var portUser ;
+    var currentPage = 1;
     $.ajax({
         url: "/api/report/selectByPrimaryKey",
         type: "post",
@@ -81,6 +83,7 @@ layui.define(['jquery','layer'], function(exports){
         },
         success: function (data) {
             if(data.id){
+                portUser = data;
                 $("#htmlTitle").text(data.name);
                 var str = "";
                 if(data.portState =="未结"){
@@ -135,6 +138,49 @@ layui.define(['jquery','layer'], function(exports){
         }
     });
 
+    var details = "     <li data-id=\"{dataId}\" class=\"jieda-daan\">\n" +
+        "            <div class=\"detail-about detail-about-reply\">\n" +
+        "              <a class=\"fly-avatar\" href=\"/user/home.html?account={userAccount}\">\n" +
+        "                <img src=\"{userImg}\" alt=\"{alias}\">\n" +
+        "              </a>\n" +
+        "              <div class=\"fly-detail-user\">\n" +
+        "                <a href=\"/user/home.html?account={userAccount}\" class=\"fly-link\">\n" +
+        "                  <cite>{alias}</cite>\n" +
+        "                  <i class=\"iconfont icon-renzheng\" title=\"认证信息：{authenticate}\"></i>\n" +
+        "                  <i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>              \n" +
+        "                </a>\n" +
+        "                \n" +
+        "                <span id='{is_currentUser}'>(楼主)</span>\n" +
+        "                <span id='{is_manager}' style=\"color:#5FB878\">(管理员)</span>\n" +
+        "\n"+
+        "              </div>\n" +
+        "\n" +
+        "              <div class=\"detail-hits\">\n" +
+        "                <span>{createData}</span>\n" +
+        "              </div>\n" +
+        "\n" +
+        "              <i id='{is_adoption}' class=\"iconfont icon-caina\" title=\"最佳答案\"></i>\n" +
+        "            </div>\n" +
+        "            <div class=\"detail-body jieda-body photos\">\n" +
+                    " {detailsText}\n" +
+        "            </div>\n" +
+        "            <div class=\"jieda-reply\">\n" +
+        "              <span class=\"jieda-zan zanok\" type=\"zan\">\n" +
+        "                <i class=\"iconfont icon-zan\"></i>\n" +
+        "                <em>{likeNumber}</em>\n" +
+        "              </span>\n" +
+        "              <span type=\"reply\">\n" +
+        "                <i class=\"iconfont icon-svgmoban53\"></i>\n" +
+        "                回复\n" +
+        "              </span>\n" +
+        "              <div class=\"jieda-admin\">\n" +
+        "                <span id='{is_edit}' type=\"edit\">编辑</span>\n" +
+        "                <span id='{is_delete}' type=\"del\">删除</span>\n" +
+        "                <span id='{adoption}' class=\"jieda-accept\" type=\"accept\">采纳</span>\n" +
+        "              </div>\n" +
+        "            </div>\n" +
+        "          </li>";
+
     function getPortDetails() {
         $.ajax({
             url: "/api/detailsText/queryDetails",
@@ -142,16 +188,78 @@ layui.define(['jquery','layer'], function(exports){
             dataType: "json",
             data: {
                 "classId": classIddata,
-                "portId": UrlParm.parm('id')
+                "portId": UrlParm.parm('id'),
+                'currentPage':currentPage
             },
             success: function (data) {
-
+                $("#jieda").empty();
+                if(data.datas.length > 0){
+                    for(var x=0;x <data.datas.length;x++){
+                        var resData = data.datas[x];
+                        var rt = details.replace(/{dataId}/g,resData.id)
+                            .replace(/{userAccount}/g,resData.userAccount)
+                            .replace(/{userImg}/g,resData.userImg)
+                            .replace(/{alias}/g,resData.alias)
+                            .replace(/{authenticate}/g,resData.authenticate)
+                            .replace(/{vipLevel}/g,resData.vipLevel)
+                            .replace(/{createData}/g,resData.createData)
+                            .replace(/{detailsText}/g,contentMy(resData.detailsText))
+                            .replace(/{likeNumber}/g,resData.likeNumber)
+                            .replace(/{is_adoption}/g,"is_adoption"+x)
+                            .replace(/{is_currentUser}/g,"is_currentUser"+x)
+                            .replace(/{is_manager}/g,"is_manager"+x)
+                            .replace(/{is_edit}/g,"is_edit"+x)
+                            .replace(/{is_delete}/g,"is_delete"+x)
+                            .replace(/{adoption}/g,"adoption"+x);
+                        $("#jieda").append(rt);
+                        if(!resData.isAdoption){
+                            $("#is_adoption"+x).remove();
+                        }
+                        if(portUser.userAccount != resData.userAccount){
+                            $("#is_currentUser"+x).remove();
+                        }
+                        if(!resData.isManager){
+                            $("#is_manager"+x).remove();
+                        }
+                        if(layui.cache.user.state != 1){
+                            $("#is_edit"+x).remove();
+                            $("#is_delete"+x).remove();
+                            $("#adoption"+x).remove();
+                        }else{
+                            if(portUser.userAccount != layui.cache.user.account
+                              || portUser.portState == "已结"){
+                                $("#adoption"+x).remove();
+                            }
+                            if(layui.cache.user.account != resData.userAccount){
+                                if(!layui.cache.user.isManager){
+                                    $("#is_delete"+x).remove();
+                                }
+                                $("#is_edit"+x).remove();
+                            }
+                        }
+                    }
+                }else{
+                    $("#jieda").html("<li class=\"fly-none\">消灭零回复</li>");
+                }
+                document.getElementById("lastPaging").setAttribute("data-id",data.page.lastPage);
+                document.getElementById("nextPaging").setAttribute("data-id",data.page.nextPage);
+                document.getElementById("endPaging").setAttribute("data-id",data.page.endPage);
+                document.getElementById("curPaging").innerText=data.page.currentPage+'/'+data.page.endPage;
+                currentPage = data.page.currentPage;
             },
             error: function (data) {
-
+                $("#jieda").html("<li class=\"fly-none\">消灭零回复</li>");
             }
         });
     };
+
+    function changePaging(obj){
+        if(document.getElementById(obj).getAttribute("data-id") != currentPage) {
+            currentPage = document.getElementById(obj).getAttribute("data-id");
+            getPortDetails();
+        }
+    };
+
     function escapeMY(html){
         return String(html||'').replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
             .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
