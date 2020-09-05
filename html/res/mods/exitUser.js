@@ -4,6 +4,7 @@ layui.define(['jquery','layer'], function(exports){
     $.ajax({
         url: "/api/clearAll",
         type: "get",
+        async: false,
         success: function (data) {
             layui.layer.msg(data.msg, {shift: 6});
         }

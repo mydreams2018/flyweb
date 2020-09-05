@@ -27,6 +27,7 @@ layui.define('jquery', function(exports){
   $.ajax({
     url: "/api/getCurrentUser",
     type: "get",
+      async: false,
     success: function (data) {
       if(!data.toString().match('<!DOCTYPE html>')){
           layui.cache.user = data;

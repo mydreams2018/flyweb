@@ -136,6 +136,7 @@ layui.config({
   layui.$.ajax({
     url: "/api/image",
     type: "get",
+    async: false,
     success: function (data) {
       layui.$("#imgCode").text(data);
     },

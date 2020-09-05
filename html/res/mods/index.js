@@ -710,6 +710,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     layui.$.ajax({
       url: "/api/image",
       type: "get",
+      async: false,
       success: function (data) {
         layui.$("#"+id).text(data);
       },

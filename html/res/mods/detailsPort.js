@@ -3,58 +3,8 @@ layui.define(['jquery','layer'], function(exports){
   var $ = layui.jquery
       ,layer=layui.layer;
 
-    var UrlParm = function () {
-        var data, index;
-        (function init() {
-            data = [];
-            index = {};
-            var u = window.location.search.substr(1);
-            if (u != '') {
-                var parms = decodeURIComponent(u).split('&');
-                for (var i = 0, len = parms.length; i < len; i++) {
-                    if (parms[i] != '') {
-                        var p = parms[i].split("=");
-                        if (p.length == 1 || (p.length == 2 && p[1] == '')) {
-                            data.push(['']);
-                            index[p[0]] = data.length - 1;
-                        } else if (typeof (p[0]) == 'undefined' || p[0] == '') {
-                            data[0] = [p[1]];
-                        } else if (typeof (index[p[0]]) == 'undefined') {
-                            data.push([p[1]]);
-                            index[p[0]] = data.length - 1;
-                        } else {
-                            data[index[p[0]]].push(p[1]);
-                        }
-                    }
-                }
-            }
-        })();
-        return {
-            parm: function (o) {
-                try {
-                    return (typeof (o) == 'number' ? data[o][0] : data[index[o]][0]);
-                } catch (e) {
-                }
-            },
-            parmValues: function (o) {
-                try {
-                    return (typeof (o) == 'number' ? data[o] : data[index[o]]);
-                } catch (e) { }
-            },
-            hasParm: function (parmName) {
-                return typeof (parmName) == 'string' ? typeof (index[parmName]) != 'undefined' : false;
-            },
-            parmMap: function () {
-                var map = {};
-                try {
-                    for (var p in index) { map[p] = data[index[p]]; }
-                } catch (e) { }
-                return map;
-            }
-        }
-    } ();
-
     var classIddata = UrlParm.parm('classId');
+    var currentPage = UrlParm.parm('currentPage')?UrlParm.parm('currentPage'):1;
     if(classIddata){
         switch (classIddata) {
             case '1':
@@ -72,11 +22,127 @@ layui.define(['jquery','layer'], function(exports){
         }
     };
     var portUser ;
-    var currentPage = 1;
+    var Htmldetails = "     <li data-id=\"{dataId}\" class=\"jieda-daan\">\n" +
+        "            <div class=\"detail-about detail-about-reply\">\n" +
+        "              <a class=\"fly-avatar\" href=\"/user/home.html?account={userAccount}\">\n" +
+        "                <img src=\"{userImg}\" alt=\"{alias}\">\n" +
+        "              </a>\n" +
+        "              <div class=\"fly-detail-user\">\n" +
+        "                <a href=\"/user/home.html?account={userAccount}\" class=\"fly-link\">\n" +
+        "                  <cite>{alias}</cite>\n" +
+        "                  <i class=\"iconfont icon-renzheng\" title=\"认证信息：{authenticate}\"></i>\n" +
+        "                  <i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>              \n" +
+        "                </a>\n" +
+        "                \n" +
+        "                <span id='{is_currentUser}'>(楼主)</span>\n" +
+        "                <span id='{is_manager}' style=\"color:#5FB878\">(管理员)</span>\n" +
+        "\n"+
+        "              </div>\n" +
+        "\n" +
+        "              <div class=\"detail-hits\">\n" +
+        "                <span>{createData}</span>\n" +
+        "              </div>\n" +
+        "\n" +
+        "              <i id='{is_adoption}' class=\"iconfont icon-caina\" title=\"最佳答案\"></i>\n" +
+        "            </div>\n" +
+        "            <div class=\"detail-body jieda-body photos\">\n" +
+        " {detailsText}\n" +
+        "            </div>\n" +
+        "            <div class=\"jieda-reply\">\n" +
+        "              <span class=\"jieda-zan zanok\" type=\"zan\">\n" +
+        "                <i class=\"iconfont icon-zan\"></i>\n" +
+        "                <em>{likeNumber}</em>\n" +
+        "              </span>\n" +
+        "              <span type=\"reply\">\n" +
+        "                <i class=\"iconfont icon-svgmoban53\"></i>\n" +
+        "                回复\n" +
+        "              </span>\n" +
+        "              <div class=\"jieda-admin\">\n" +
+        "                <span id='{is_edit}' type=\"edit\">编辑</span>\n" +
+        "                <span id='{is_delete}' type=\"del\">删除</span>\n" +
+        "                <span id='{adoption}' class=\"jieda-accept\" type=\"accept\">采纳</span>\n" +
+        "              </div>\n" +
+        "            </div>\n" +
+        "          </li>";
+//查回贴
+    function getPortDetails() {
+        $.ajax({
+            url: "/api/detailsText/queryDetails",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: {
+                "classId": classIddata,
+                "portId": UrlParm.parm('id'),
+                'currentPage':currentPage
+            },
+            success: function (data) {
+                $("#jieda").empty();
+                if(data.datas.length > 0){
+                    for(var x=0;x <data.datas.length;x++){
+                        var resData = data.datas[x];
+                        var rt = Htmldetails.replace(/{dataId}/g,resData.id)
+                            .replace(/{userAccount}/g,resData.userAccount)
+                            .replace(/{userImg}/g,resData.userImg)
+                            .replace(/{alias}/g,resData.alias)
+                            .replace(/{authenticate}/g,resData.authenticate)
+                            .replace(/{vipLevel}/g,resData.vipLevel)
+                            .replace(/{createData}/g,resData.createData)
+                            .replace(/{detailsText}/g,contentMy(resData.detailsText))
+                            .replace(/{likeNumber}/g,resData.likeNumber)
+                            .replace(/{is_adoption}/g,"is_adoption"+x)
+                            .replace(/{is_currentUser}/g,"is_currentUser"+x)
+                            .replace(/{is_manager}/g,"is_manager"+x)
+                            .replace(/{is_edit}/g,"is_edit"+x)
+                            .replace(/{is_delete}/g,"is_delete"+x)
+                            .replace(/{adoption}/g,"adoption"+x);
+                        $("#jieda").append(rt);
+                        if(!resData.isAdoption){
+                            $("#is_adoption"+x).remove();
+                        }
+                        if(portUser.userAccount != resData.userAccount){
+                            $("#is_currentUser"+x).remove();
+                        }
+                        if(!resData.isManager){
+                            $("#is_manager"+x).remove();
+                        }
+                        if(layui.cache.user.state != 1){
+                            $("#is_edit"+x).remove();
+                            $("#is_delete"+x).remove();
+                            $("#adoption"+x).remove();
+                        }else{
+                            if(portUser.userAccount != layui.cache.user.account
+                                || portUser.portState == "已结"){
+                                $("#adoption"+x).remove();
+                            }
+                            if(layui.cache.user.account != resData.userAccount){
+                                if(!layui.cache.user.isManager){
+                                    $("#is_delete"+x).remove();
+                                }
+                                $("#is_edit"+x).remove();
+                            }
+                        }
+                    }
+                }else{
+                    $("#jieda").html("<li class=\"fly-none\">消灭零回复</li>");
+                }
+                document.getElementById("lastPaging").setAttribute("data-id",data.page.lastPage);
+                document.getElementById("nextPaging").setAttribute("data-id",data.page.nextPage);
+                document.getElementById("endPaging").setAttribute("data-id",data.page.endPage);
+                document.getElementById("curPaging").setAttribute("data-id",data.page.currentPage);
+                document.getElementById("curPaging").innerText=data.page.currentPage+'/'+data.page.endPage;
+            },
+            error: function (data) {
+                $("#jieda").html("<li class=\"fly-none\">消灭零回复</li>");
+            }
+        });
+    }
+    // 查主贴
     $.ajax({
         url: "/api/report/selectByPrimaryKey",
         type: "post",
         dataType: "json",
+        async: false,
         data: {
             "classId":classIddata,
             "id": UrlParm.parm('id')
@@ -137,128 +203,6 @@ layui.define(['jquery','layer'], function(exports){
             window.location.href='/404.html';
         }
     });
-
-    var details = "     <li data-id=\"{dataId}\" class=\"jieda-daan\">\n" +
-        "            <div class=\"detail-about detail-about-reply\">\n" +
-        "              <a class=\"fly-avatar\" href=\"/user/home.html?account={userAccount}\">\n" +
-        "                <img src=\"{userImg}\" alt=\"{alias}\">\n" +
-        "              </a>\n" +
-        "              <div class=\"fly-detail-user\">\n" +
-        "                <a href=\"/user/home.html?account={userAccount}\" class=\"fly-link\">\n" +
-        "                  <cite>{alias}</cite>\n" +
-        "                  <i class=\"iconfont icon-renzheng\" title=\"认证信息：{authenticate}\"></i>\n" +
-        "                  <i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>              \n" +
-        "                </a>\n" +
-        "                \n" +
-        "                <span id='{is_currentUser}'>(楼主)</span>\n" +
-        "                <span id='{is_manager}' style=\"color:#5FB878\">(管理员)</span>\n" +
-        "\n"+
-        "              </div>\n" +
-        "\n" +
-        "              <div class=\"detail-hits\">\n" +
-        "                <span>{createData}</span>\n" +
-        "              </div>\n" +
-        "\n" +
-        "              <i id='{is_adoption}' class=\"iconfont icon-caina\" title=\"最佳答案\"></i>\n" +
-        "            </div>\n" +
-        "            <div class=\"detail-body jieda-body photos\">\n" +
-                    " {detailsText}\n" +
-        "            </div>\n" +
-        "            <div class=\"jieda-reply\">\n" +
-        "              <span class=\"jieda-zan zanok\" type=\"zan\">\n" +
-        "                <i class=\"iconfont icon-zan\"></i>\n" +
-        "                <em>{likeNumber}</em>\n" +
-        "              </span>\n" +
-        "              <span type=\"reply\">\n" +
-        "                <i class=\"iconfont icon-svgmoban53\"></i>\n" +
-        "                回复\n" +
-        "              </span>\n" +
-        "              <div class=\"jieda-admin\">\n" +
-        "                <span id='{is_edit}' type=\"edit\">编辑</span>\n" +
-        "                <span id='{is_delete}' type=\"del\">删除</span>\n" +
-        "                <span id='{adoption}' class=\"jieda-accept\" type=\"accept\">采纳</span>\n" +
-        "              </div>\n" +
-        "            </div>\n" +
-        "          </li>";
-
-    function getPortDetails() {
-        $.ajax({
-            url: "/api/detailsText/queryDetails",
-            type: "post",
-            dataType: "json",
-            data: {
-                "classId": classIddata,
-                "portId": UrlParm.parm('id'),
-                'currentPage':currentPage
-            },
-            success: function (data) {
-                $("#jieda").empty();
-                if(data.datas.length > 0){
-                    for(var x=0;x <data.datas.length;x++){
-                        var resData = data.datas[x];
-                        var rt = details.replace(/{dataId}/g,resData.id)
-                            .replace(/{userAccount}/g,resData.userAccount)
-                            .replace(/{userImg}/g,resData.userImg)
-                            .replace(/{alias}/g,resData.alias)
-                            .replace(/{authenticate}/g,resData.authenticate)
-                            .replace(/{vipLevel}/g,resData.vipLevel)
-                            .replace(/{createData}/g,resData.createData)
-                            .replace(/{detailsText}/g,contentMy(resData.detailsText))
-                            .replace(/{likeNumber}/g,resData.likeNumber)
-                            .replace(/{is_adoption}/g,"is_adoption"+x)
-                            .replace(/{is_currentUser}/g,"is_currentUser"+x)
-                            .replace(/{is_manager}/g,"is_manager"+x)
-                            .replace(/{is_edit}/g,"is_edit"+x)
-                            .replace(/{is_delete}/g,"is_delete"+x)
-                            .replace(/{adoption}/g,"adoption"+x);
-                        $("#jieda").append(rt);
-                        if(!resData.isAdoption){
-                            $("#is_adoption"+x).remove();
-                        }
-                        if(portUser.userAccount != resData.userAccount){
-                            $("#is_currentUser"+x).remove();
-                        }
-                        if(!resData.isManager){
-                            $("#is_manager"+x).remove();
-                        }
-                        if(layui.cache.user.state != 1){
-                            $("#is_edit"+x).remove();
-                            $("#is_delete"+x).remove();
-                            $("#adoption"+x).remove();
-                        }else{
-                            if(portUser.userAccount != layui.cache.user.account
-                              || portUser.portState == "已结"){
-                                $("#adoption"+x).remove();
-                            }
-                            if(layui.cache.user.account != resData.userAccount){
-                                if(!layui.cache.user.isManager){
-                                    $("#is_delete"+x).remove();
-                                }
-                                $("#is_edit"+x).remove();
-                            }
-                        }
-                    }
-                }else{
-                    $("#jieda").html("<li class=\"fly-none\">消灭零回复</li>");
-                }
-                document.getElementById("lastPaging").setAttribute("data-id",data.page.lastPage);
-                document.getElementById("nextPaging").setAttribute("data-id",data.page.nextPage);
-                document.getElementById("endPaging").setAttribute("data-id",data.page.endPage);
-                document.getElementById("curPaging").innerText=data.page.currentPage+'/'+data.page.endPage;
-                currentPage = data.page.currentPage;
-            },
-            error: function (data) {
-                $("#jieda").html("<li class=\"fly-none\">消灭零回复</li>");
-            }
-        });
-    };
-
-    function changePaging(obj){
-        if(document.getElementById(obj).getAttribute("data-id") != currentPage) {
-            currentPage = document.getElementById(obj).getAttribute("data-id");
-            getPortDetails();
-        }
-    };
 
     function escapeMY(html){
         return String(html||'').replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')

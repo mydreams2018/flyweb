@@ -231,6 +231,7 @@ function getPortData(){
     url: "/api/report/queryReport",
     type: "post",
     dataType: "json",
+    async: false,
     data: {
       'datatype':datatype,
       'portState':portState,
@@ -314,6 +315,7 @@ function initTopData() {
     url: "/api/report/queryReport",
     type: "post",
     dataType: "json",
+    async: false,
     data: {
       'isTop':1,
       'orderType':orderType,
