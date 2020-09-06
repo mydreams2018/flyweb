@@ -590,7 +590,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     }
     text = text.replace(/^@|（[\s\S]+?）/g, '');
     othis.attr({
-      href: '/jump?username='+ text
+      href: '/user/home?userName='+ text
       ,target: '_blank'
     });
   });
@@ -629,6 +629,23 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       });
       return false;
     };
+
+    if(action =='/api/detailsText/sendReply'){
+      $.ajax({
+        type: 'post',
+        dataType: "json",
+        data: data.field,
+        url: action,
+        success: function(res){
+          layer.msg(res.msg, {shift: 6});
+          getImageBase(res.id);
+        },error: function(res){
+          layer.msg(res.msg, {shift: 6});
+          getImageBase(res.id);
+        }
+      });
+      return false;
+    }
     if(data.field.repassword){
       if(data.field.password != data.field.repassword){
         layer.msg("二次密码不一致" ,{shift: 6});
@@ -700,8 +717,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     ,bgcolor: '#009688'
     ,click: function(type){
       if(type === 'bar1'){
-        layer.msg('打开 index.js，开启发表新帖的路径');
-        // location.href = '/';
+        // layer.msg('打开 index.js，开启发表新帖的路径');
+        location.href = '/jie/add.html';
       }
     }
   });

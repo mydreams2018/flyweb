@@ -1,9 +1,12 @@
 
-layui.define(['jquery','layer'], function(exports){
+layui.define(['jquery','layer','face'], function(exports){
   var $ = layui.jquery
-      ,layer=layui.layer;
+      ,layer=layui.layer
+      ,faces = layui.face;
 
     var classIddata = UrlParm.parm('classId');
+    $("#classId").val(classIddata);
+    $("#portId").val(UrlParm.parm('id'));
     var currentPage = UrlParm.parm('currentPage')?UrlParm.parm('currentPage'):1;
     if(classIddata){
         switch (classIddata) {
@@ -218,7 +221,7 @@ layui.define(['jquery','layer'], function(exports){
             }).replace(/@(\S+)(\s+?|$)/g, '@<a href="javascript:;" class="fly-aite">$1</a>$2') //转义@
             .replace(/face\[([^\s\[\]]+?)\]/g, function(face){  //转义表情
                 var alt = face.replace(/^face/g, '');
-                return '<img alt="'+ alt +'" title="'+ alt +'" src="' + fly.faces[alt] + '">';
+                return '<img alt="'+ alt +'" title="'+ alt +'" src="' + faces[alt] + '">';
             }).replace(/a\([\s\S]+?\)\[[\s\S]*?\]/g, function(str){ //转义链接
                 var href = (str.match(/a\(([\s\S]+?)\)\[/)||[])[1];
                 var text = (str.match(/\)\[([\s\S]*?)\]/)||[])[1];
