@@ -248,7 +248,7 @@ function getPortData(){
           for(var x=0;x<res.datas.length;x++){
             var resData = res.datas[x];
             var str = "<li>\n"+
-                    "            <a href=\"/user/home.html?account={userAccount}\" class=\"fly-avatar\">\n" +
+                    "            <a href=\"/user/home.html?alias={alias}\" class=\"fly-avatar\">\n" +
                     "              <img src=\"{userImg}\" alt=\"xx\">\n" +
                     "            </a>\n" +
                     "\t\t\t\n" +
@@ -257,8 +257,8 @@ function getPortData(){
                     "              <a href=\"/jie/detail.html?classId=1&id={portId}\">{portTitle}</a>\n" +
                     "            </h2>\n" +
                     "            <div class=\"fly-list-info\">\n" +
-                    "              <a href=\"/user/home.html?account={userAccount}\" link>\n" +
-                    "                <cite>{userAlias}</cite>\n";
+                    "              <a href=\"/user/home.html?alias={alias}\" link>\n" +
+                    "                <cite>{alias}</cite>\n";
                     str = str + "<i class=\"iconfont icon-renzheng\" title=\"认证信息：{authenticate}\"></i>\n";
                     str = str + "<i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>\n";
                     str = str + "  </a>\n"
@@ -287,7 +287,7 @@ function getPortData(){
                         }
                     };
                     str = str +  "</li>";
-                    var rt = str.replace(/{userAccount}/g,resData.userAccount).replace(/{userImg}/g,resData.userImg).replace(/{userAlias}/g,resData.alias)
+                    var rt = str.replace(/{userImg}/g,resData.userImg).replace(/{alias}/g,resData.alias)
                     .replace(/{portTitle}/g,resData.name).replace(/{portId}/g,resData.id)
                     .replace(/{authenticate}/g,resData.authenticate?resData.authenticate:'无').replace(/{vipLevel}/g,resData.vipLevel)
                     .replace(/{createTime}/g,resData.createTime).replace(/{experience}/g,resData.experience)

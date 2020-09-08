@@ -34,39 +34,6 @@ layui.define('fly', function(exports){
     layer.tips('你已选择', obj.othis, tips);
   });
 
-  //提交回答
-  fly.form['/jie/reply/'] = function(data, required){
-    var tpl = '<li>\
-      <div class="detail-about detail-about-reply">\
-        <a class="fly-avatar" href="/u/{{ layui.cache.user.state }}" target="_blank">\
-          <img src="{{= d.user.img}}" alt="{{= d.user.alias}}">\
-        </a>\
-        <div class="fly-detail-user">\
-          <a href="/u/{{ layui.cache.user.state }}" target="_blank" class="fly-link">\
-            <cite>{{d.user.alias}}</cite>\
-          </a>\
-        </div>\
-        <div class="detail-hits">\
-          <span>刚刚</span>\
-        </div>\
-      </div>\
-      <div class="detail-body jieda-body photos">\
-        {{ d.content}}\
-      </div>\
-    </li>'
-    data.content = fly.content(data.content);
-    laytpl(tpl).render($.extend(data, {
-      user: layui.cache.user
-    }), function(html){
-      required[0].value = '';
-      dom.jieda.find('.fly-none').remove();
-      dom.jieda.append(html);
-      
-      var count = dom.jiedaCount.text()|0;
-      dom.jiedaCount.html(++count);
-    });
-  };
-
   //求解管理
   gather.jieAdmin = {
     //删求解

@@ -325,7 +325,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     ,newmsg: function(){
       var elemUser = $('.fly-nav-user');
       if(layui.cache.user.state == 1 && elemUser[0]){
-        console.log(layui.cache.user.account);
+        console.log(layui.cache.user.alias);
         // fly.json('/message/nums/', {
         //   _: new Date().getTime()
         // }, function(res){
@@ -590,7 +590,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     }
     text = text.replace(/^@|（[\s\S]+?）/g, '');
     othis.attr({
-      href: '/user/home?userName='+ text
+      href: '/user/home.html?alias='+ text
       ,target: '_blank'
     });
   });

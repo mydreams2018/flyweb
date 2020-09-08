@@ -3,7 +3,7 @@ layui.define('jquery', function(exports){
 
   var $ = layui.jquery;
  var currentUser = {
-     account: '游客'
+     alias: '游客'
    ,state: 0
    ,img: '/api/userImg/default.jpg'
    ,accumulatePoints: 0

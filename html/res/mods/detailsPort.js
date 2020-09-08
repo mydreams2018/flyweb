@@ -27,11 +27,11 @@ layui.define(['jquery','layer','face'], function(exports){
     var portUser ;
     var Htmldetails = "     <li data-id=\"{dataId}\" class=\"jieda-daan\">\n" +
         "            <div class=\"detail-about detail-about-reply\">\n" +
-        "              <a class=\"fly-avatar\" href=\"/user/home.html?account={userAccount}\">\n" +
+        "              <a class=\"fly-avatar\" href=\"/user/home.html?alias={alias}\">\n" +
         "                <img src=\"{userImg}\" alt=\"{alias}\">\n" +
         "              </a>\n" +
         "              <div class=\"fly-detail-user\">\n" +
-        "                <a href=\"/user/home.html?account={userAccount}\" class=\"fly-link\">\n" +
+        "                <a href=\"/user/home.html?alias={alias}\" class=\"fly-link\">\n" +
         "                  <cite>{alias}</cite>\n" +
         "                  <i class=\"iconfont icon-renzheng\" title=\"认证信息：{authenticate}\"></i>\n" +
         "                  <i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>              \n" +
@@ -77,7 +77,8 @@ layui.define(['jquery','layer','face'], function(exports){
             data: {
                 "classId": classIddata,
                 "portId": UrlParm.parm('id'),
-                'currentPage':currentPage
+                'currentPage':currentPage,
+                'orderType':'id'
             },
             success: function (data) {
                 $("#jieda").empty();
@@ -85,7 +86,6 @@ layui.define(['jquery','layer','face'], function(exports){
                     for(var x=0;x <data.datas.length;x++){
                         var resData = data.datas[x];
                         var rt = Htmldetails.replace(/{dataId}/g,resData.id)
-                            .replace(/{userAccount}/g,resData.userAccount)
                             .replace(/{userImg}/g,resData.userImg)
                             .replace(/{alias}/g,resData.alias)
                             .replace(/{authenticate}/g,resData.authenticate)
@@ -103,7 +103,7 @@ layui.define(['jquery','layer','face'], function(exports){
                         if(!resData.isAdoption){
                             $("#is_adoption"+x).remove();
                         }
-                        if(portUser.userAccount != resData.userAccount){
+                        if(portUser.alias != resData.alias){
                             $("#is_currentUser"+x).remove();
                         }
                         if(!resData.isManager){
@@ -114,11 +114,11 @@ layui.define(['jquery','layer','face'], function(exports){
                             $("#is_delete"+x).remove();
                             $("#adoption"+x).remove();
                         }else{
-                            if(portUser.userAccount != layui.cache.user.account
+                            if(portUser.alias != layui.cache.user.alias
                                 || portUser.portState == "已结"){
                                 $("#adoption"+x).remove();
                             }
-                            if(layui.cache.user.account != resData.userAccount){
+                            if(layui.cache.user.alias != resData.alias){
                                 if(!layui.cache.user.isManager){
                                     $("#is_delete"+x).remove();
                                 }
@@ -168,16 +168,16 @@ layui.define(['jquery','layer','face'], function(exports){
                     str = str +  "  <span class=\"layui-badge layui-bg-red\">精帖</span>\n";
                 };
                 str = str +   "    <span class=\"fly-list-nums\"> \n" +
-                    "            <a href=\"#comment\"><i class=\"iconfont\" title=\"回答\">&#xe60c;</i>{replyNumber}</a>\n" +
+                    "            <a href=\"#L_content\"><i class=\"iconfont\" title=\"回答\">&#xe60c;</i>{replyNumber}</a>\n" +
                     "            <i class=\"iconfont\" title=\"人气\">&#xe60b;</i>{lookNumber}\n" +
                     "          </span>";
                 var rt = str.replace(/{replyNumber}/g,data.replyNumber).replace(/{lookNumber}/g,data.lookNumber);
                 $("#portHead").html(rt);
-                str = "  <a class=\"fly-avatar\" href=\"/user/home.html?account={userAccount}\">\n" +
+                str = "  <a class=\"fly-avatar\" href=\"/user/home.html?alias={alias}\">\n" +
                     "            <img src=\"{userImg}\" alt=\"{alias}\">\n" +
                     "          </a>\n" +
                     "          <div class=\"fly-detail-user\">\n" +
-                    "            <a href=\"/user/home.html?account={userAccount}\" class=\"fly-link\">\n" +
+                    "            <a href=\"/user/home.html?alias={alias}\" class=\"fly-link\">\n" +
                     "              <cite>{alias}</cite>\n" +
                     "              <i class=\"iconfont icon-renzheng\" title=\"认证信息：{authenticate}\"></i>\n" +
                     "              <i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>\n" +
@@ -188,12 +188,12 @@ layui.define(['jquery','layer','face'], function(exports){
                     "            <span style=\"padding-right: 10px; color: #ff7200\">悬赏：{experience}飞吻</span>  \n" +
                     "            <span id='editPort' class=\"layui-btn layui-btn-xs jie-admin\" type=\"edit\"><a href=\"/user/edit.html?classId={classId}&id={portId}\">编辑此贴</a></span>\n" +
                     "          </div>";
-                rt = str.replace(/{userAccount}/g,data.userAccount).replace(/{userImg}/g,data.userImg)
+                rt = str.replace(/{userImg}/g,data.userImg)
                     .replace(/{alias}/g,data.alias).replace(/{authenticate}/g,data.authenticate?data.authenticate:'无')
                     .replace(/{vipLevel}/g,data.vipLevel).replace(/{createTime}/g,data.createTime)
                     .replace(/{portId}/g,data.id).replace(/{experience}/g,data.experience).replace(/{classId}/g,classIddata);
                 $("#aboutUser").html(rt);
-                if(layui.cache.user.account != data.userAccount){
+                if(layui.cache.user.alias != data.alias){
                     $("#editPort").remove();
                 };
                 $("#detailBody").html(contentMy(data.details.detailsText));
