@@ -102,18 +102,32 @@ layui.define('fly', function(exports){
   //解答操作
   gather.jiedaActive = {
     zan: function(li){ //赞
-      var othis = $(this), ok = othis.hasClass('zanok');
-      fly.json('/api/jieda-zan/', {
-        ok: ok
-        ,id: li.data('id')
-      }, function(res){
-        if(res.status === 0){
-          var zans = othis.find('em').html()|0;
-          othis[ok ? 'removeClass' : 'addClass']('zanok');
-          othis.find('em').html(ok ? (--zans) : (++zans));
-        } else {
-          layer.msg(res.msg);
-        }
+      if(layui.cache.user.state != 1){
+        layer.msg("请先登录" ,{shift: 6});
+        return ;
+      }
+      var othis = $(this);
+      layui.$.ajax({
+            url: "/api/detailsText/likeAccount",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: {
+              id:li.data('id'),
+              'classId':UrlParm.parm("classId")
+            },
+            error: function (res) {
+              layer.msg(res.msg ,{shift: 6});
+            },
+            success: function(res){
+              if(res.status === 0){
+                var zans = othis.find('em').html()|0;
+                othis['addClass']('zanok');
+                othis.find('em').html(++zans);
+              } else {
+                layer.msg(res.msg ,{shift: 6});
+              }
+            }
       });
     }
     ,reply: function(li){ //回复

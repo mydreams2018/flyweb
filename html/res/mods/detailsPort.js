@@ -52,7 +52,7 @@ layui.define(['jquery','layer','face'], function(exports){
         " {detailsText}\n" +
         "            </div>\n" +
         "            <div class=\"jieda-reply\">\n" +
-        "              <span class=\"jieda-zan zanok\" type=\"zan\">\n" +
+        "              <span class=\"jieda-zan\" type=\"zan\">\n" +
         "                <i class=\"iconfont icon-zan\"></i>\n" +
         "                <em>{likeNumber}</em>\n" +
         "              </span>\n" +
