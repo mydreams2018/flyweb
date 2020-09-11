@@ -185,19 +185,24 @@ layui.define('fly', function(exports){
     ,del: function(li){ //删除
       layer.confirm('确认删除该回答么？', function(index){
         layer.close(index);
-        fly.json('/api/jieda-delete/', {
-          id: li.data('id')
-        }, function(res){
-          if(res.status === 0){
-            var count = dom.jiedaCount.text()|0;
-            dom.jiedaCount.html(--count);
-            li.remove();
-            //如果删除了最佳答案
-            if(li.hasClass('jieda-daan')){
-              $('.jie-status').removeClass('jie-status-ok').text('求解中');
+        layui.$.ajax({
+          url: "/api/detailsText/deleteReplyPort",
+          type: "post",
+          dataType: "json",
+          async: false,
+          data: {
+            id:li.data('id'),
+            'classId':UrlParm.parm("classId")
+          },
+          error: function (res) {
+            layer.msg(res.msg ,{shift: 6});
+          },
+          success: function(res){
+            if(res.status === 0){
+              li.remove();
+            } else {
+              layer.msg(res.msg ,{shift: 6});
             }
-          } else {
-            layer.msg(res.msg);
           }
         });
       });    
