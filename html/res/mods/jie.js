@@ -142,44 +142,84 @@ layui.define('fly', function(exports){
       var othis = $(this);
       layer.confirm('是否采纳该回答为最佳答案？', function(index){
         layer.close(index);
-        fly.json('/api/jieda-accept/', {
-          id: li.data('id')
-        }, function(res){
-          if(res.status === 0){
-            $('.jieda-accept').remove();
-            li.addClass('jieda-daan');
-            li.find('.detail-about').append('<i class="iconfont icon-caina" title="最佳答案"></i>');
-          } else {
-            layer.msg(res.msg);
+        layui.$.ajax({
+          url: "/api/detailsText/acceptReply",
+          type: "post",
+          dataType: "json",
+          async: false,
+          data: {
+            id:li.data('id'),
+            'classId':UrlParm.parm("classId")
+          },
+          error: function (res) {
+            layer.msg(res.msg ,{shift: 6});
+          },
+          success: function(res){
+            if(res.status === 0){
+              $('.jieda-accept').remove();
+              li.addClass('jieda-daan');
+              li.find('.detail-about').append('<i class="iconfont icon-caina" title="最佳答案"></i>');
+            } else {
+              layer.msg(res.msg ,{shift: 6});
+            }
           }
         });
       });
     }
     ,edit: function(li){ //编辑
-      fly.json('/jie/getDa/', {
-        id: li.data('id')
-      }, function(res){
-        var data = res.rows;
-        layer.prompt({
-          formType: 2
-          ,value: data.content
-          ,maxlength: 100000
-          ,title: '编辑回帖'
-          ,area: ['728px', '300px']
-          ,success: function(layero){
-            fly.layEditor({
-              elem: layero.find('textarea')
+      layui.$.ajax({
+        url: "/api/detailsText/selectByPrimaryKey",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {
+          id:li.data('id'),
+          'classId':UrlParm.parm("classId")
+        },
+        error: function (res) {
+          layer.msg(res.msg ,{shift: 6});
+        },
+        success: function(res){
+          if(res.id){
+            layer.prompt({
+              formType: 2
+              ,value: res.detailsText
+              ,maxlength: 100000
+              ,title: '编辑回帖'
+              ,area: ['728px', '300px']
+              ,success: function(layero){
+                fly.layEditor({
+                  elem: layero.find('textarea')
+                });
+              }
+            }, function(value, index){
+              layer.close(index);
+              layui.$.ajax({
+                url: "/api/detailsText/updateByPrimaryKey",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                  id:li.data('id'),
+                  'classId':UrlParm.parm("classId"),
+                  'detailsText':value
+                },
+                error: function (res) {
+                  layer.msg(res.msg ,{shift: 6});
+                },
+                success: function(res){
+                  if(res.status === 0){
+                    li.find('.detail-body').html(fly.content(value));
+                  } else {
+                    layer.msg(res.msg ,{shift: 6});
+                  }
+                }
+              });
             });
+          }else{
+            layer.msg('贴子异常' ,{shift: 6});
           }
-        }, function(value, index){
-          fly.json('/jie/updateDa/', {
-            id: li.data('id')
-            ,content: value
-          }, function(res){
-            layer.close(index);
-            li.find('.detail-body').html(fly.content(value));
-          });
-        });
+        }
       });
     }
     ,del: function(li){ //删除
