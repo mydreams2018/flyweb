@@ -186,7 +186,7 @@ layui.define(['jquery','layer','face'], function(exports){
                     "          </div>\n" +
                     "          <div class=\"detail-hits\" id=\"LAY_jieAdmin\" data-id=\"{portId}\">\n" +
                     "            <span style=\"padding-right: 10px; color: #ff7200\">悬赏：{experience}飞吻</span>  \n" +
-                    "            <span id='editPort' class=\"layui-btn layui-btn-xs jie-admin\"><a href=\"/user/edit.html?classId={classId}&id={portId}\">编辑此贴</a></span>\n" +
+                    "            <span id='editPort' class=\"layui-btn layui-btn-xs jie-admin\"><a href=\"/jie/edit.html?classId={classId}&id={portId}\">编辑此贴</a></span>\n" +
                     "          </div>";
                 rt = str.replace(/{userImg}/g,data.userImg)
                     .replace(/{alias}/g,data.alias).replace(/{authenticate}/g,data.authenticate?data.authenticate:'无')

@@ -630,6 +630,31 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       return false;
     };
 
+    if(action =='/api/report/update'){
+      data.field.name = data.field['title'];
+      data.field.id = data.field['dataid'];
+      $.ajax({
+        type: 'post',
+        dataType: "json",
+        data: data.field,
+        url: action,
+        async: false,
+        success: function(res){
+          if(res.status == 0) {
+            if(res.action){
+              location.href = res.action;
+            }
+          } else {
+            layer.msg(res.msg ,{shift: 6});
+            getImageBase(res.id);
+          }
+        },error: function(e){
+          layer.msg('请求异常,请重试', {shift: 6});
+        }
+      });
+      return false;
+    };
+
     if(action =='/api/detailsText/sendReply'){
       $.ajax({
         type: 'post',
