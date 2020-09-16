@@ -113,6 +113,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
         dataType: options.dataType || 'json',
         data: data,
         url: url,
+        async: false,
         success: function(res){
           if(res.status === 0) {
             success && success(res);
@@ -614,6 +615,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
         dataType: "json",
         data: data.field,
         url: action,
+        async: false,
         success: function(res){
           if(res.status == 0) {
             if(res.action){
@@ -661,6 +663,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
         dataType: "json",
         data: data.field,
         url: action,
+        async: false,
         success: function(res){
           layer.msg(res.msg, {shift: 6});
           getImageBase(res.id);
@@ -682,6 +685,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       dataType: "json",
       data: data.field,
       url: action,
+      async: false,
       success: function(res){
         if(res.status == 0) {
           if(res.action){
