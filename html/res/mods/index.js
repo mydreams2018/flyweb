@@ -357,51 +357,26 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
   };
 
   //签到
-  var tplSignin = ['{{# if(d.signed){ }}'
-    ,'<button class="layui-btn layui-btn-disabled">今日已签到</button>'
-    ,'<span>获得了<cite>{{ d.experience }}</cite>飞吻</span>'
-  ,'{{# } else { }}'
-    ,'<button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>'
-    ,'<span>可获得<cite>{{ d.experience }}</cite>飞吻</span>'
-  ,'{{# } }}'].join('')
-  ,tplSigninDay = '已连续签到<cite>{{ d.days }}</cite>天'
+  var elemSigninHelp = $('#LAY_signinHelp');
 
-  ,signRender = function(data){
-    laytpl(tplSignin).render(data, function(html){
-      elemSigninMain.html(html);
-    });
-    laytpl(tplSigninDay).render(data, function(html){
-      elemSigninDays.html(html);
-    });
-  }
-
-  ,elemSigninHelp = $('#LAY_signinHelp')
-  ,elemSigninMain = $('.fly-signin-main')
-  ,elemSigninDays = $('.fly-signin-days');
-  
-  if(elemSigninMain[0]){
-    /*
-    fly.json('/sign/status', function(res){
-      if(!res.data) return;
-      signRender.token = res.data.token;
-      signRender(res.data);
-    });
-    */
-  }
   $('body').on('click', '#LAY_signin', function(){
     var othis = $(this);
     if(othis.hasClass(DISABLED)) return;
-
-    fly.json('/sign/in', {
-      token: signRender.token || 1
-    }, function(res){
-      signRender(res.data);
-    }, {
-      error: function(){
-        othis.removeClass(DISABLED);
+    if(layui.cache.user.state != 1){
+      layer.msg('请先登入',{shift: 2});
+      return;
+    }
+    $.ajax({
+      url: "/api/userSign/signOn",
+      type: "post",
+      async: false,
+      success: function (data) {
+        layer.msg(data.msg,{shift: 2});
+      },
+      error: function () {
+        layer.msg('请求异常,请重试',{shift: 2});
       }
     });
-
     othis.addClass(DISABLED);
   });
 

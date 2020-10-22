@@ -463,12 +463,12 @@
         </ul>
       </div>
 
-      <div class="fly-panel fly-signin">
+      <div id="user_signcount" class="fly-panel fly-signin">
         <div class="fly-panel-title">
           签到
           <i class="fly-mid"></i> 
           <a href="javascript:;" class="fly-link" id="LAY_signinHelp">说明</a>
-          <span class="fly-signin-days">已连续签到<cite>16</cite>天</span>
+          <span class="fly-signin-days">已连续签到<cite>0</cite>天</span>
         </div>
         <div class="fly-panel-main fly-signin-main">
           <button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>
@@ -588,8 +588,9 @@ layui.config({
   ,base: '/res/mods/' //这里实际使用时，建议改成绝对路径
 }).extend({
   account: 'currentAccount',
+  welcome: 'welcome',
   fly: 'index'
-}).use(['account','fly'],function () {
+}).use(['account','welcome','fly'],function () {
   if(layui.cache.user.state != 1){
     layui.$("#mysend-port").remove();
     layui.$("#myfavorites-port").remove();
