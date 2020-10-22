@@ -48,5 +48,26 @@ layui.define('jquery', function(exports){
       $("#LAY_signin").removeClass("layui-btn-danger");
       $("#LAY_signin").addClass("layui-btn-disabled");
   }
+
+  var userReply = " <dd>\n" +
+      "      <a href=\"/user/home.html?alias={userAlias}\">\n" +
+      "      <img src=\"{userImg}\"><cite>{userAlias}</cite><i>{replyNumber}次回答</i>\n" +
+      "      </a>\n" +
+      "    </dd>";
+  $.ajax({
+        url: "/api/userReplyPort/selectAll",
+        type: "post",
+        async: false,
+        success: function (data) {
+            if(data && data.length > 0){
+                for(var x=0;x<data.length;x++){
+                    var replyRt = userReply.replace(/{userAlias}/g,data[x].alias)
+                        .replace(/{userImg}/g,data[x].userImg)
+                        .replace(/{replyNumber}/g,data[x].replyNumber);
+                    $("#user_replyPort").append(replyRt);
+                }
+            }
+        }
+  });
   exports('welcome', null);
 });
