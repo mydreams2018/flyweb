@@ -69,5 +69,74 @@ layui.define('jquery', function(exports){
             }
         }
   });
-  exports('welcome', null);
+    var portData = " <li>\n" +
+        "            <a href=\"/user/home.html?alias={userAlias}\" class=\"fly-avatar\">\n" +
+        "              <img src=\"{userImg}\" alt=\"{userAlias}\">\n" +
+        "            </a>\n" +
+        "            <h2>\n" +
+        "              <a class=\"layui-badge\">动态</a>\n" +
+        "              <a href=\"/jie/detail.html?classId=1&id={portId}\">{portTitle}</a>\n" +
+        "            </h2>\n" +
+        "            <div class=\"fly-list-info\">\n" +
+        "              <a href=\"/user/home.html?alias={userAlias}\" link>\n" +
+        "                <cite>{userAlias}</cite>\n" +
+        "                <i class=\"iconfont icon-renzheng\" title=\"认证信息:{authenticate}\"></i>\n" +
+        "                <i class=\"layui-badge fly-badge-vip\">{vipLevel}</i>\n" +
+        "              </a>\n" +
+        "              <span>{createTime}</span>\n" +
+        "              <span class=\"fly-list-kiss layui-hide-xs\" title=\"悬赏飞吻\"><i class=\"iconfont icon-kiss\"></i>{experience}</span>\n" +
+        "              <span class=\"layui-badge fly-badge-accept layui-hide-xs\">{portState}</span>\n" +
+        "              <span class=\"fly-list-nums\"> \n" +
+        "                <i class=\"iconfont icon-pinglun1\" title=\"回答\"></i>{replyNumber}\n" +
+        "              </span>\n" +
+        "            </div>\n" +
+        "            <div class=\"fly-list-badge\">\n" +
+        "              <span class=\"layui-badge layui-bg-red\">精帖</span>\n" +
+        "            </div>\n" +
+        "          </li>";
+  function dataPorts(order){
+      $("#kungreatPort").empty();
+      $.ajax({
+          url: "/api/report/queryReport",
+          type: "post",
+          async: false,
+          data: {
+              'classId':1,
+              'orderType':order,
+              'userAccount':'kungreat',
+              'currentPage':1,
+              'pageSize':8
+          },
+          success: function (data) {
+              if(data && data.datas.length > 0){
+                  var dt = data.datas;
+                  for(var x=0;x<dt.length;x++){
+                     var ps =  portData.replace(/{userAlias}/g,dt[x].alias)
+                          .replace(/{userImg}/g,dt[x].userImg)
+                          .replace(/{replyNumber}/g,dt[x].replyNumber)
+                          .replace(/{portId}/g,dt[x].id)
+                          .replace(/{portTitle}/g,dt[x].name)
+                          .replace(/{authenticate}/g,dt[x].authenticate?dt[x].authenticate:"无")
+                          .replace(/{vipLevel}/g,dt[x].vipLevel)
+                          .replace(/{createTime}/g,dt[x].createTime)
+                          .replace(/{experience}/g,dt[x].experience)
+                          .replace(/{portState}/g,dt[x].portState);
+                     $("#kungreatPort").append(ps);
+                  }
+              }
+          }
+      });
+  };
+  $("#order_new").on("click",function (data) {
+      $("#order_replyNum").removeClass("layui-this");
+      $("#order_new").addClass("layui-this");
+      dataPorts("create_time");
+  });
+    $("#order_replyNum").on("click",function (data) {
+        $("#order_new").removeClass("layui-this");
+        $("#order_replyNum").addClass("layui-this");
+        dataPorts("reply_number");
+    });
+    dataPorts("create_time");
+    exports('welcome', null);
 });
