@@ -166,6 +166,7 @@
   var isEssence;
   var orderType = 'create_time';
   var currentPage = 1;
+  var titleSearch;
 layui.cache.page = 'jie';
 layui.config({
   version: "3.0.0"
@@ -178,6 +179,32 @@ layui.config({
     layui.$("#mysend-port").remove();
     layui.$("#myfavorites-port").remove();
   };
+  //搜索
+  layui.$('.fly-search').on('click', function(){
+    layui.layer.open({
+      type: 1
+      ,title: false
+      ,closeBtn: true
+      //,shade: [0.1, '#fff']
+      ,shadeClose: true
+      ,maxWidth: 10000
+      ,skin: 'fly-layer-search'
+      ,content: ['<form action="/">'
+        ,'<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
+        ,'</form>'].join('')
+      ,success: function(layero){
+        var input = layero.find('input');
+        input.focus();
+        layero.find('form').submit(function(e){
+          e.preventDefault();//取消表单提交事件
+          var dts = input.val().replace(/(^\s*)|(\s*$)/g, "");
+          layui.layer.closeAll('page');//关闭弹窗
+          titleSearch = dts;
+          getPortData();
+        });
+      }
+    })
+  });
   getPortData();
   initTopData();
 });
@@ -237,7 +264,8 @@ function getPortData(){
       'isEssence':isEssence,
       'orderType':orderType,
       'currentPage':currentPage,
-      'classId':1
+      'classId':1,
+      'name': titleSearch
     },
     success: function (res) {
         if(res && res.datas.length > 0){

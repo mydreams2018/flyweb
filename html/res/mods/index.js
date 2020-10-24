@@ -444,38 +444,6 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     });
   }
 
-
-  //搜索
-  $('.fly-search').on('click', function(){
-    layer.open({
-      type: 1
-      ,title: false
-      ,closeBtn: true
-      //,shade: [0.1, '#fff']
-      ,shadeClose: true
-      ,maxWidth: 10000
-      ,skin: 'fly-layer-search'
-      ,content: ['<form action="/">'
-        ,'<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
-      ,'</form>'].join('')
-      ,success: function(layero){
-        var input = layero.find('input');
-        input.focus();
-
-        layero.find('form').submit(function(e){
-          e.preventDefault();//取消表单提交事件
-          var val = input.val().replace(/(^\s*)|(\s*$)/g, "");
-          if(val == ''){
-            return false;//如果数据为空返回
-          }
-          layer.closeAll('page');//关闭弹窗
-          //TODO
-
-      });
-      }
-    })
-  });
-
   //新消息通知
   fly.newmsg();
 
