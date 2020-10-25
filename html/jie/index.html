@@ -190,11 +190,14 @@ layui.config({
       ,maxWidth: 10000
       ,skin: 'fly-layer-search'
       ,content: ['<form action="/">'
-        ,'<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
+        ,'<input autocomplete="off" placeholder="搜索内容,回车查询" type="text" name="q">'
         ,'</form>'].join('')
       ,success: function(layero){
         var input = layero.find('input');
         input.focus();
+        if(titleSearch && titleSearch!=''){
+          input.val(titleSearch);
+        }
         layero.find('form').submit(function(e){
           e.preventDefault();//取消表单提交事件
           var dts = input.val().replace(/(^\s*)|(\s*$)/g, "");
