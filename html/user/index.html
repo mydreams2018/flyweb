@@ -90,6 +90,14 @@
   
   
   <div class="fly-panel fly-panel-user" pad20>
+    <div class="fly-tab-border">
+      <span>
+        <a href="javascript:changeClassId(1);" class="tab-this">后端</a>
+        <a href="javascript:changeClassId(2);">前端</a>
+        <a href="javascript:changeClassId(3);">数据</a>
+        <a href="javascript:changeClassId(4);">综合</a>
+      </span>
+    </div>
     <!--
     <div class="fly-msg" style="margin-top: 15px;">
       您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
@@ -102,25 +110,8 @@
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
-          <ul class="mine-view jie-row">
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>2017/3/14 上午8:30:00</i>
-              <a class="mine-edit" href="/jie/edit/8116">编辑</a>
-              <em>661阅/10答</em>
-            </li>
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>2017/3/14 上午8:30:00</i>
-              <a class="mine-edit" href="/jie/edit/8116">编辑</a>
-              <em>661阅/10答</em>
-            </li>
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>2017/3/14 上午8:30:00</i>
-              <a class="mine-edit" href="/jie/edit/8116">编辑</a>
-              <em>661阅/10答</em>
-            </li>
+          <ul class="mine-view jie-row" id="myPortQuery">
+
           </ul>
           <div style="text-align:center" class="layui-hide-xs">
             <div class="laypage-main">
@@ -157,13 +148,70 @@
 <script src="/res/layui/layui.js"></script>
 <script>
 // layui.cache.page = 'user';
+var currentPage = 1;
+var classId = 1;
 layui.config({
   version: "3.0.0"
   ,base: '/res/mods/'
 }).extend({
   account: 'currentAccount',
   fly: 'index'
-}).use(['account','fly']);
+}).use(['account','fly'],function(){
+  if(layui.cache.user.state != 1){
+     window.location.href="/user/login.html";
+  };
+  myReport();
+});
+var str = " <li>\n" +
+        "              <a class=\"jie-title\" href=\"/jie/detail.html?classId={classId}&id={dataId}\" target=\"_blank\">{poreTitle}</a>\n" +
+        "              <i>{createTime}</i>\n" +
+        "              <a class=\"mine-edit\" href=\"/jie/edit.html?classId={classId}&id={dataId}\">编辑</a>\n" +
+        "              <em>{replyNumber}答</em>\n" +
+        "            </li>";
+function changePaging(obj){
+  if(document.getElementById(obj).getAttribute("data-id") != currentPage) {
+    currentPage = document.getElementById(obj).getAttribute("data-id");
+    myReport();
+  }
+};
+function changeClassId(curp){
+  classId=curp;
+  layui.$(".fly-tab-border span a").removeClass("tab-this");
+  layui.$(".fly-tab-border span a:nth-child("+curp+")").addClass("tab-this");
+  myReport();
+};
+function myReport(){
+  layui.$.ajax({
+    url: "/api/report/myQueryReport",
+    type: "post",
+    dataType: "json",
+    async: false,
+    data: {
+      "classId":classId,
+      "currentPage":currentPage
+    },
+    error:function(res){
+      layui.layer.msg('服务异常',{shift: 6});
+    },
+    success:function(res){
+      layui.$("#myPortQuery").empty();
+      if(res && res.datas.length > 0){
+        for(var x=0;x<res.datas.length;x++) {
+          var resData = res.datas[x];
+          var rt = str.replace(/{classId}/g,classId).replace(/{dataId}/g,resData.id)
+                  .replace(/{poreTitle}/g,resData.name).replace(/{createTime}/g,resData.createTime)
+                  .replace(/{replyNumber}/g,resData.replyNumber);
+          layui.$("#myPortQuery").append(rt);
+        }
+        document.getElementById("lastPaging").setAttribute("data-id",res.page.lastPage);
+        document.getElementById("nextPaging").setAttribute("data-id",res.page.nextPage);
+        document.getElementById("endPaging").setAttribute("data-id",res.page.endPage);
+        document.getElementById("curPaging").innerText=res.page.currentPage+'/'+res.page.endPage;
+        currentPage = res.page.currentPage;
+      }
+    }
+  });
+};
 </script>
 
 </body>
