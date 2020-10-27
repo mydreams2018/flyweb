@@ -203,12 +203,12 @@ function myReport(){
                   .replace(/{replyNumber}/g,resData.replyNumber);
           layui.$("#myPortQuery").append(rt);
         }
-        document.getElementById("lastPaging").setAttribute("data-id",res.page.lastPage);
-        document.getElementById("nextPaging").setAttribute("data-id",res.page.nextPage);
-        document.getElementById("endPaging").setAttribute("data-id",res.page.endPage);
-        document.getElementById("curPaging").innerText=res.page.currentPage+'/'+res.page.endPage;
-        currentPage = res.page.currentPage;
       }
+      document.getElementById("lastPaging").setAttribute("data-id",res.page.lastPage);
+      document.getElementById("nextPaging").setAttribute("data-id",res.page.nextPage);
+      document.getElementById("endPaging").setAttribute("data-id",res.page.endPage);
+      document.getElementById("curPaging").innerText=res.page.currentPage+'/'+res.page.endPage;
+      currentPage = res.page.currentPage;
     }
   });
 };
