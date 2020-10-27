@@ -323,15 +323,15 @@ function getPortData(){
                     .replace(/{portState}/g,resData.portState).replace(/{replyNumber}/g,resData.replyNumber);
                     document.getElementById("back_portData").appendChild(layui.$(rt)[0]);
           }
-          document.getElementById("lastPaging").setAttribute("data-id",res.page.lastPage);
-          document.getElementById("nextPaging").setAttribute("data-id",res.page.nextPage);
-          document.getElementById("endPaging").setAttribute("data-id",res.page.endPage);
-          document.getElementById("curPaging").innerText=res.page.currentPage+'/'+res.page.endPage;
-          currentPage = res.page.currentPage;
         }else{
           layui.$("#back_portNone").removeClass('layui-hide');
           layui.$("#back_portData").addClass('layui-hide');
         }
+      document.getElementById("lastPaging").setAttribute("data-id",res.page.lastPage);
+      document.getElementById("nextPaging").setAttribute("data-id",res.page.nextPage);
+      document.getElementById("endPaging").setAttribute("data-id",res.page.endPage);
+      document.getElementById("curPaging").innerText=res.page.currentPage+'/'+res.page.endPage;
+      currentPage = res.page.currentPage;
     },
     error: function () {
       layui.$("#back_portNone").removeClass('layui-hide');
