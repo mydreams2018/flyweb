@@ -229,6 +229,9 @@ layui.config({
   details: 'detailsPort',
   fly: 'index'
 }).use(['account','details', 'fly', 'face'], function(){
+  var curColect ={
+    id:null
+  };
   if(layui.cache.user.state != 1){
     layui.$("#mysend-port").remove();
     layui.$("#myfavorites-port").remove();
@@ -244,8 +247,59 @@ layui.config({
       error: function () {
         layui.$("#imgCode").text("验证异常");
       }
-    })
+    });
+    layui.$.ajax({
+      url: "/api/userCollect/selectByPrimaryKey",
+      type: "post",
+      data:{
+        "classId": UrlParm.parm('classId'),
+        "portId": UrlParm.parm('id')
+      },
+      async: false,
+      success: function(data){
+        if(data && data.userAccount){
+          curColect = data;
+          document.getElementById("userCollect").style.color="#009688";
+        }
+      }
+    });
   }
+  layui.$("#userCollect").on("click",function(){
+    if(layui.cache.user.state == 1){
+      if(curColect && curColect.userAccount){
+        layui.layer.confirm('是否取消收藏', function(index){
+          layui.layer.close(index);
+          sendCollect();
+          console.log('取消收藏');
+        });
+      }else{
+        sendCollect();
+      }
+    }else{
+      layui.layer.msg("请先登入", {icon: 5});
+    }
+  });
+  function sendCollect(){
+    layui.$.ajax({
+      url: "/api/userCollect/sendCollect",
+      type: "post",
+      data: {
+        "classId": UrlParm.parm('classId'),
+        "portId": UrlParm.parm('id'),
+        "id": curColect.id
+      },
+      async: false,
+      success: function(data){
+        if(data && data.userAccount){
+          curColect = data;
+          document.getElementById("userCollect").style.color="#009688";
+        }else{
+          curColect = null;
+          document.getElementById("userCollect").style.color="";
+        }
+      }
+    });
+  };
   //如果你是采用模版自带的编辑器，你需要开启以下语句来解析。
  /* layui.$('.detail-body').each(function(){
     var othis = layui.$(this), html = othis.html();

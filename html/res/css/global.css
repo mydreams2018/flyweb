@@ -342,7 +342,7 @@ body .layui-edit-face  .layui-layer-content{padding:0; background-color:#fff; co
 .fly-detail-info .layui-btn+.layui-btn{margin-left: 0;}
 .fly-admin-box{position: relative; display: inline-block; vertical-align: top; margin-left: 20px;}
 .fly-detail-info .fly-list-nums{top: -3px; font-size: 16px;}
-.fly-detail-info .fly-list-nums i{padding: 0 3px 0 15px; font-size: 22px; color: #999;}
+.fly-detail-info .fly-list-nums i{padding: 0 3px 0 15px; font-size: 22px;}
 
 .detail-about{position: relative; line-height: 20px; padding: 15px 15px 15px 75px; font-size: 13px; background-color: #f8f8f8; color: #999;}
 .detail-about .jie-status, .detail-about .jie-status-ok{color:#fff;}

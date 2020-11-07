@@ -169,9 +169,9 @@ layui.define(['jquery','layer','face'], function(exports){
                 };
                 str = str +   "    <span class=\"fly-list-nums\"> \n" +
                     "            <a href=\"#L_content\"><i class=\"iconfont\" title=\"回答\">&#xe60c;</i>{replyNumber}</a>\n" +
-                    "            <i class=\"iconfont\" title=\"人气\">&#xe60b;</i>{lookNumber}\n" +
+                    "            <a id='userCollect' href=\"javascript:;\"> <i class=\"iconfont\" title=\"收藏\">&#xe60b;</i></a>\n" +
                     "          </span>";
-                var rt = str.replace(/{replyNumber}/g,data.replyNumber).replace(/{lookNumber}/g,data.lookNumber);
+                var rt = str.replace(/{replyNumber}/g,data.replyNumber);
                 $("#portHead").html(rt);
                 str = "  <a class=\"fly-avatar\" href=\"/user/home.html?alias={alias}\">\n" +
                     "            <img src=\"{userImg}\" alt=\"{alias}\">\n" +
