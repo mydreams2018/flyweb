@@ -106,7 +106,7 @@
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
         <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖</li>
-        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖</li>
+        <li data-type="collection" lay-id="collection">我收藏的帖</li>
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
@@ -124,12 +124,17 @@
           </div>
         </div>
         <div class="layui-tab-item">
-          <ul class="mine-view jie-row">
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>收藏于23小时前</i>  </li>
+          <ul class="mine-view jie-row" id="myColQuery">
           </ul>
-          <div id="LAY_page1"></div>
+          <div style="text-align:center" class="layui-hide-xs">
+            <div class="laypage-main">
+              <a id="homePagingCol" href="javascript:changePagingCol('homePagingCol')" data-id="1">首页</a>
+              <a id="lastPagingCol" href="javascript:changePagingCol('lastPagingCol')">上一页</a>
+              <a id="nextPagingCol" href="javascript:changePagingCol('nextPagingCol')" >下一页</a>
+              <a id="endPagingCol" href="javascript:changePagingCol('endPagingCol')" >尾页</a>
+              <a id="curPagingCol" title="当前页" href="javascript:changePagingCol('curPagingCol')">0</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -149,6 +154,7 @@
 <script>
 // layui.cache.page = 'user';
 var currentPage = 1;
+var currentPageCol = 1;
 var classId = 1;
 layui.config({
   version: "3.0.0"
@@ -161,6 +167,7 @@ layui.config({
      window.location.href="/user/login.html";
   };
   myReport();
+  myReportCol();
 });
 var str = " <li>\n" +
         "              <a class=\"jie-title\" href=\"/jie/detail.html?classId={classId}&id={dataId}\" target=\"_blank\">{poreTitle}</a>\n" +
@@ -168,17 +175,21 @@ var str = " <li>\n" +
         "              <a class=\"mine-edit\" href=\"/jie/edit.html?classId={classId}&id={dataId}\">编辑</a>\n" +
         "              <em>{replyNumber}答</em>\n" +
         "            </li>";
+var strCol = "<li>\n" +
+        "              <a class=\"jie-title\" href=\"/jie/detail.html?classId={classId}&id={dataId}\" target=\"_blank\">{poreTitle}</a>\n" +
+        "              <i>{collectTime}</i>\n" +
+        "    </li>";
 function changePaging(obj){
   if(document.getElementById(obj).getAttribute("data-id") != currentPage) {
     currentPage = document.getElementById(obj).getAttribute("data-id");
     myReport();
   }
 };
-function changeClassId(curp){
-  classId=curp;
-  layui.$(".fly-tab-border span a").removeClass("tab-this");
-  layui.$(".fly-tab-border span a:nth-child("+curp+")").addClass("tab-this");
-  myReport();
+function changePagingCol(obj){
+  if(document.getElementById(obj).getAttribute("data-id") != currentPageCol) {
+    currentPageCol = document.getElementById(obj).getAttribute("data-id");
+    myReportCol();
+  }
 };
 function myReport(){
   layui.$.ajax({
@@ -211,6 +222,44 @@ function myReport(){
       currentPage = res.page.currentPage;
     }
   });
+};
+function myReportCol(){
+  layui.$.ajax({
+    url: "/api/userCollect/queryReport",
+    type: "post",
+    dataType: "json",
+    async: false,
+    data: {
+      "classId":classId,
+      "currentPage":currentPageCol
+    },
+    error:function(res){
+      layui.layer.msg('服务异常',{shift: 6});
+    },
+    success:function(res){
+      layui.$("#myColQuery").empty();
+      if(res && res.datas.length > 0){
+        for(var x=0;x<res.datas.length;x++) {
+          var resData = res.datas[x];
+          var rt = strCol.replace(/{classId}/g,classId).replace(/{dataId}/g,resData.portId)
+                  .replace(/{poreTitle}/g,resData.portTitle).replace(/{collectTime}/g,resData.collectTime);
+          layui.$("#myColQuery").append(rt);
+        }
+      }
+      document.getElementById("lastPagingCol").setAttribute("data-id",res.page.lastPage);
+      document.getElementById("nextPagingCol").setAttribute("data-id",res.page.nextPage);
+      document.getElementById("endPagingCol").setAttribute("data-id",res.page.endPage);
+      document.getElementById("curPagingCol").innerText=res.page.currentPage+'/'+res.page.endPage;
+      currentPageCol = res.page.currentPage;
+    }
+  });
+};
+function changeClassId(curp){
+  classId = curp;
+  layui.$(".fly-tab-border span a").removeClass("tab-this");
+  layui.$(".fly-tab-border span a:nth-child("+curp+")").addClass("tab-this");
+  myReport();
+  myReportCol();
 };
 </script>
 
