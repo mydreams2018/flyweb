@@ -256,6 +256,8 @@ function myReportCol(){
 };
 function changeClassId(curp){
   classId = curp;
+  currentPage = 1;
+  currentPageCol = 1;
   layui.$(".fly-tab-border span a").removeClass("tab-this");
   layui.$(".fly-tab-border span a:nth-child("+curp+")").addClass("tab-this");
   myReport();
