@@ -535,6 +535,48 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       return false;
     };
 
+    if(action =='/api/user/updateByPrimaryKey'){
+      $.ajax({
+        type: 'post',
+        dataType: "json",
+        data: data.field,
+        url: action,
+        async: false,
+        success: function(res){
+          layer.msg(res.msg ,{shift: 6});
+        },
+        error: function(e){
+          layer.msg('请求异常', {shift: 6});
+        }
+      });
+      return false;
+    };
+    if(action == '/api/user/rePass'){
+      if(data.field.pass != data.field.rePass){
+        layer.msg("二次密码不一致" ,{shift: 6});
+        return false;
+      }
+      if(data.field.pass.length < 6 || data.field.pass.length >12
+        || data.field.nowpass.length < 6 || data.field.nowpass.length >12 ){
+        layer.msg("密码必须6-12位" ,{shift: 6});
+        return false;
+      }
+      data.field.password = data.field['nowpass'];
+      $.ajax({
+        type: 'post',
+        dataType: "json",
+        data: data.field,
+        url: action,
+        async: false,
+        success: function(res){
+          layer.msg(res.msg, {shift: 6});
+        },error: function(res){
+          layer.msg(res.msg, {shift: 6});
+        }
+      });
+      return false;
+    };
+
     if(action =='/api/detailsText/sendReply'){
       $.ajax({
         type: 'post',
