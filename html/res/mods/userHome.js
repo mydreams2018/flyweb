@@ -129,7 +129,7 @@ layui.define(['jquery','layer'],function(exports){
           success:function(res){
               if(res.id){
                  var rt =  str.replace(/{img}/g,res.img)
-                      .replace(/{alias}/g,res.alias)
+                      .replace(/{alias}/g,(res.state == 1?res.alias:"此号已封"))
                       .replace(/{vipLevel}/g,res.vipLevel)
                       .replace(/{authenticate}/g,res.authenticate?res.authenticate:'无')
                       .replace(/{accumulatePoints}/g,res.accumulatePoints)
@@ -138,7 +138,9 @@ layui.define(['jquery','layer'],function(exports){
                   if(!res.isManager){
                       $("#is_manager").remove();
                   }
-                  userPort();
+                  if(res.state == 1){
+                      userPort();
+                  }
               } else {
                   layer.msg('异常',{shift: 6});
               }
