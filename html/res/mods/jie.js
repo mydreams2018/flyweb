@@ -40,30 +40,12 @@ layui.define('fly', function(exports){
     del: function(div){
       layer.confirm('确认删除该求解么？', function(index){
         layer.close(index);
-        fly.json('/api/jie-delete/', {
-          id: div.data('id')
-        }, function(res){
-          if(res.status === 0){
-            location.href = '/jie/';
-          } else {
-            layer.msg(res.msg);
-          }
-        });
       });
     }
     
     //设置置顶、状态
     ,set: function(div){
       var othis = $(this);
-      fly.json('/api/jie-set/', {
-        id: div.data('id')
-        ,rank: othis.attr('rank')
-        ,field: othis.attr('field')
-      }, function(res){
-        if(res.status === 0){
-          location.reload();
-        }
-      });
     }
   };
 
@@ -94,7 +76,7 @@ layui.define('fly', function(exports){
               layer.msg(res.msg ,{shift: 6});
             },
             success: function(res){
-              if(res.status === 0){
+              if(res.status == 1){
                 var zans = othis.find('em').html()|0;
                 othis['addClass']('zanok');
                 othis.find('em').html(++zans);
@@ -129,7 +111,7 @@ layui.define('fly', function(exports){
             layer.msg(res.msg ,{shift: 6});
           },
           success: function(res){
-            if(res.status === 0){
+            if(res.status == 1){
               $('.jieda-accept').remove();
               li.addClass('jieda-daan');
               li.find('.detail-about').append('<i class="iconfont icon-caina" title="最佳答案"></i>');
@@ -182,7 +164,7 @@ layui.define('fly', function(exports){
                   layer.msg(res.msg ,{shift: 6});
                 },
                 success: function(res){
-                  if(res.status === 0){
+                  if(res.status == 1){
                     li.find('.detail-body').html(fly.content(value));
                   } else {
                     layer.msg(res.msg ,{shift: 6});
@@ -212,7 +194,7 @@ layui.define('fly', function(exports){
             layer.msg(res.msg ,{shift: 6});
           },
           success: function(res){
-            if(res.status === 0){
+            if(res.status == 1){
               li.remove();
             } else {
               layer.msg(res.msg ,{shift: 6});

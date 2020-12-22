@@ -166,7 +166,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
           avatarAdd.find('.loading').show();
         }
         ,done: function(res){
-          if(res.status == 0){
+          if(res.status == 1){
             window.location.reload();
           } else {
             layer.msg(res.msg, {icon: 5});
@@ -268,7 +268,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       fly.json('/api/unbind', {
         type: type
       }, function(res){
-        if(res.status === 0){
+        if(res.status == 1){
           layer.alert('已成功解绑。', {
             icon: 1
             ,end: function(){
@@ -322,7 +322,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       fly.json('/message/remove/', {
         id: id
       }, function(res){
-        if(res.status === 0){
+        if(res.status == 1){
           othis.remove();
           delEnd();
         }
@@ -336,7 +336,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
         fly.json('/message/remove/', {
           all: true
         }, function(res){
-          if(res.status === 0){
+          if(res.status == 1){
             layer.close(index);
             othis.addClass('layui-hide');
             delEnd(true);

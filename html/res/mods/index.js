@@ -115,7 +115,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
         url: url,
         async: false,
         success: function(res){
-          if(res.status === 0) {
+          if(res.status == 1) {
             success && success(res);
           } else {
             layer.msg(res.msg || res.code, {shift: 6});
@@ -205,7 +205,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
                 ,url: '/api/uploadImg'
                 ,size: 300
                 ,done: function(res){
-                  if(res.status == 0){
+                  if(res.status == 1){
                     image.val(res.action);
                   } else {
                     layer.msg(res.msg, {icon: 5});
@@ -327,29 +327,6 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       var elemUser = $('.fly-nav-user');
       if(layui.cache.user.state == 1 && elemUser[0]){
         console.log(layui.cache.user.alias);
-        // fly.json('/message/nums/', {
-        //   _: new Date().getTime()
-        // }, function(res){
-        //   if(res.status === 0 && res.count > 0){
-        //     var msg = $('<a class="fly-nav-msg" href="javascript:;">'+ res.count +'</a>');
-        //     elemUser.append(msg);
-        //     msg.on('click', function(){
-        //       fly.json('/message/read', {}, function(res){
-        //         if(res.status === 0){
-        //           location.href = '/user/message/';
-        //         }
-        //       });
-        //     });
-        //     layer.tips('你有 '+ res.count +' 条未读消息', msg, {
-        //       tips: 3
-        //       ,tipsMore: true
-        //       ,fixed: true
-        //     });
-        //     msg.on('mouseenter', function(){
-        //       layer.closeAll('tips');
-        //     })
-        //   }
-        // });
       }
       return arguments.callee;
     }
@@ -449,13 +426,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
 
   //发送激活邮件
   fly.activate = function(email){
-    fly.json('/api/activate/', {}, function(res){
-      if(res.status === 0){
-        layer.alert('已成功将激活链接发送到了您的邮箱，接受可能会稍有延迟，请注意查收。', {
-          icon: 1
-        });
-      };
-    });
+
   };
   $('#LAY-activate').on('click', function(){
     fly.activate($(this).attr('email'));
@@ -495,7 +466,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
         url: action,
         async: false,
         success: function(res){
-          if(res.status == 0) {
+          if(res.status == 1) {
             if(res.action){
               location.href = res.action;
             }
@@ -520,7 +491,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
         url: action,
         async: false,
         success: function(res){
-          if(res.status == 0) {
+          if(res.status == 1) {
             if(res.action){
               location.href = res.action;
             }
@@ -607,7 +578,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       url: action,
       async: false,
       success: function(res){
-        if(res.status == 0) {
+        if(res.status == 1) {
           if(res.action){
             location.href = res.action;
           }
