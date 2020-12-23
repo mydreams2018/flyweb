@@ -64,13 +64,19 @@
               <div class="layui-form-item">
                 <label for="L_Account" class="layui-form-label">用户</label>
                 <div class="layui-input-inline">
-                  <input type="text" id="L_Account" name="account" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="text" id="L_Account" maxlength="12" name="account" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
                 <label for="L_Email" class="layui-form-label">密保</label>
                 <div class="layui-input-inline">
                   <input type="text" id="L_Email" name="email" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_Repass" class="layui-form-label">新密码</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="L_Repass" maxlength="12" name="rePass" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
