@@ -118,7 +118,11 @@ layui.config({
 }).extend({
   account: 'currentAccount',
   fly: 'index'
-}).use(['account','fly']);
+}).use(['account','fly'],function () {
+  if(layui.cache.user.state != 1){
+    window.location.href="/user/login.html";
+  };
+});
 </script>
 
 </body>
