@@ -324,11 +324,28 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     
     //新消息通知
     ,newmsg: function(){
-      var elemUser = $('.fly-nav-user');
-      if(layui.cache.user.state == 1 && elemUser[0]){
-        console.log(layui.cache.user.alias);
+      if(layui.cache.user.state == 1){
+         if(location.href=="https://www.kungreat.cn/index.html" ||location.href=="https://www.kungreat.cn/"
+             ||location.href=="https://www.kungreat.cn/jie/index.html" ){
+           layui.$.ajax({
+             url: "/api/userMessage/selectCount",
+             type: "post",
+             async: false,
+             success: function (res) {
+               if(res && !res.toString().match('<!DOCTYPE html>') && res > 0){
+                 layer.msg('您有'+res+'条@信息,请到个人信息中查看', {
+                   icon: 1,
+                   time: 2000,
+                   offset: 'rb',
+                   move: false
+                 }, function(){
+
+                 });
+               }
+             }
+           });
+         }
       }
-      return arguments.callee;
     }
     
   };
@@ -623,14 +640,6 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     $('body').removeClass('site-mobile');
   });
 
-  //获取统计数据
-  $('.fly-handles').each(function(){
-    var othis = $(this);
-    $.get('/api/handle?alias='+ othis.data('alias'), function(res){
-      othis.html('(下载量：'+ res.number +')');
-    })
-  });
-  
   //固定Bar
   util.fixbar({
     bar1: '&#xe642;'
