@@ -402,29 +402,6 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
     });
   });
 
-  //回帖榜
-  var tplReply = ['{{# layui.each(d.data, function(index, item){ }}'
-    ,'<dd>'
-      ,'<a href="/u/{{item.uid}}">'
-        ,'<img src="{{item.user.avatar}}">'
-        ,'<cite>{{item.user.username}}</cite>'
-        ,'<i>{{item["count(*)"]}}次回答</i>'
-      ,'</a>'
-    ,'</dd>'
-  ,'{{# }); }}'].join('')
-  ,elemReply = $('#LAY_replyRank');
-
-  if(elemReply[0]){
-    /*
-    fly.json('/top/reply/', {
-      limit: 20
-    }, function(res){
-      var html = laytpl(tplReply).render(res);
-      elemReply.find('dl').html(html);
-    });
-    */
-  };
-
   //相册
   if($(window).width() > 750){
     layer.photos({
