@@ -18,7 +18,7 @@ layui.define('jquery', function(exports){
      "        <a href=\"/user/reg.html\">注册</a>\n" +
      "      </li>\n" +
      "      <li class=\"layui-nav-item layui-hide-xs\">\n" +
-     "        <a href=\"/api/auth/qq\" onclick=\"layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})\" title=\"QQ登入\" class=\"iconfont icon-qq\"></a>\n" +
+     "        <a href=\"/api/authorization/login/qq\" title=\"QQ登入\" class=\"iconfont icon-qq\"></a>\n" +
      "      </li>\n" +
      "      <li class=\"layui-nav-item layui-hide-xs\">\n" +
      "        <a href=\"#\" onclick=\"layer.msg('还在开发中', {icon:16, shade: 0.1, time:2000})\" title=\"微博登入\" class=\"iconfont icon-weibo\"></a>\n" +
