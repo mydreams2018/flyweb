@@ -448,7 +448,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util', 'carousel'
       data.field.dataversion = data.field['cusVersion'+inx];
       data.field.useides = data.field['useides'+inx];
       data.field.name = data.field['title'];
-      data.field.id = data.field['dataid'];
+      //data.field.id = data.field['dataid'];
       if(data.field.experience > layui.cache.user.accumulatePoints){
         layer.msg('飞吻数据不足', {shift: 6});
         return false;
