@@ -4,7 +4,7 @@ layui.define(['jquery','layer','face'], function(exports){
       ,layer=layui.layer
       ,faces = layui.face;
 
-    var classIddata = UrlParm.parm('classId');
+    var classIddata = UrlParm.parm('classId')?UrlParm.parm('classId'):1;
     $("#classId").val(classIddata);
     $("#portId").val(UrlParm.parm('id'));
     var currentPage = UrlParm.parm('currentPage')?UrlParm.parm('currentPage'):1;

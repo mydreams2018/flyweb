@@ -139,6 +139,7 @@
                       <option value="oracle">oracle</option>
                       <option value="redis">redis</option>
                       <option value="mongodb">mongodb</option>
+                      <option value="others">others</option>
                     </select>
                   </div>
                 </div>
@@ -227,15 +228,10 @@
   </p>
 </div>
 
-
 <script type="application/javascript">
   var cusxhr = new XMLHttpRequest();//第一步：新建对象
   cusxhr.onreadystatechange = function(){
     if (cusxhr.readyState == 4 && cusxhr.status == 200) {
-      if(cusxhr.responseText.match('<!DOCTYPE html>')){
-        //302重定向处理
-        window.location="/user/login.html";
-      }else{
         var  data = JSON.parse(cusxhr.responseText);
         for(var x=0;x<data.length;x++){
           var tmoption = document.createElement('option');
@@ -243,10 +239,9 @@
           tmoption.value=data[x].id;
           tmoption.text=data[x].name;
         }
-      }
     }
   };
-  cusxhr.open('GET', '/api/selectChildrens/selectByParentId?id=0', false);//第二步：打开连接  将请求参数写在url中
+  cusxhr.open('GET', '/common/menuTypes.json', false);//第二步：打开连接  将请求参数写在url中
   cusxhr.send();//第三步：发送请求  将请求参数写在URL中
 </script>
 
