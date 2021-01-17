@@ -119,9 +119,7 @@ layui.define(['jquery','layer','face'], function(exports){
                                 $("#adoption"+x).remove();
                             }
                             if(layui.cache.user.alias != resData.alias){
-                                if(!layui.cache.user.isManager){
-                                    $("#is_delete"+x).remove();
-                                }
+                                $("#is_delete"+x).remove();
                                 $("#is_edit"+x).remove();
                             }
                         }
