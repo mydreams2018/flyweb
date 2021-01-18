@@ -4,8 +4,8 @@
 <html style="background-color: #e2e2e2;">
 <head>
   <meta charset="utf-8">
-  <meta name="keywords" content="{{ lay.base.keywords }}">
-  <meta name="description" content="{{ lay.base.description }}">
+  <meta name="keywords" content="java,编程交流社区">
+  <meta name="description" content="java,编程交流社区,襄阳人本地的编程社区">
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -67,16 +67,16 @@
 <div class="fly-main" style="overflow: hidden;">
 
   <div class="fly-tab-border fly-case-tab">
-    <span>
-      <a href="" class="tab-this">2020年度</a>
-      <a href="">2019年度</a>
-        <a href="">2018年度</a>
+    <span id="getYears">
+      <a id="one-year" href="javascript:changeYears('one-year')" class="tab-this"></a>
+      <a id="two-year" href="javascript:changeYears('two-year')"></a>
+      <a id="three-year" href="javascript:changeYears('three-year')"></a>
     </span>
   </div>
   <div class="layui-tab layui-tab-brief">
     <ul class="layui-tab-title">
-      <li class="layui-this"><a href="">按提交时间</a></li>
-      <li><a href="">按点赞排行</a></li>
+      <li class="layui-this" id="create_time"><a href="javascript:changeOrder('create_time');">按提交时间</a></li>
+      <li id="reply_number"><a href="javascript:changeOrder('reply_number');">按点赞排行</a></li>
     </ul>
   </div>
 
@@ -229,15 +229,36 @@
 
 <script src="/res/layui/layui.js"></script>
 <script>
+  var curYear = new Date().getFullYear();
+  var orderType = "create_time";
 layui.config({
   version: "3.0.0"
   ,base: '/res/mods/' //这里实际使用时，建议改成绝对路径
 }).extend({
   account: 'currentAccount',
   fly: 'index'
-}).use(['account','fly']);
-var currentYear = document.getElementById("currentYear");
-currentYear.textContent=new Date().getFullYear();
+}).use(['account','fly'],function () {
+  var currentYear = document.getElementById("currentYear");
+  currentYear.textContent=curYear;
+  layui.$("#getYears").children().eq(0).text(curYear+"年度");
+  layui.$("#getYears").children().eq(1).text(curYear-1+"年度");
+  layui.$("#getYears").children().eq(2).text(curYear-2+"年度");
+});
+ function changeYears(st){
+   document.getElementById("one-year").className="";
+   document.getElementById("two-year").className="";
+   document.getElementById("three-year").className="";
+   document.getElementById(st).className="tab-this";
+   curYear = document.getElementById(st).textContent.substring(0,4);
+   console.log(curYear);
+ }
+  function changeOrder(st){
+    document.getElementById("create_time").className="";
+    document.getElementById("reply_number").className="";
+    document.getElementById(st).className="layui-this";
+    orderType = st;
+    console.log(orderType);
+  }
 </script>
 </body>
 </html>
