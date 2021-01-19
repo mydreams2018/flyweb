@@ -4,105 +4,15 @@
 
  */
  
-layui.define(['laypage', 'fly'], function(exports){
+layui.define(['fly'], function(exports){
 
   var $ = layui.jquery;
   var layer = layui.layer;
-  var util = layui.util;
-  var laytpl = layui.laytpl;
-  var form = layui.form;
-  var laypage = layui.laypage;
-  var upload = layui.upload;
   var fly = layui.fly;
-  var device = layui.device();
-  
 
-  //求解管理
   var active = {
-    //提交精华
-    push: function(div){
-      layer.open({
-        type: 1
-        ,id: 'LAY_pushcase'
-        ,title: '提交精华'
-        ,area: (device.ios || device.android) ? ($(window).width() + 'px') : '660px'
-        ,content: ['<ul class="layui-form" style="margin: 20px;">'
-          ,'<li class="layui-form-item">'
-            ,'<label class="layui-form-label">精华名称</label>'
-            ,'<div class="layui-input-block">'
-              ,'<input required name="title" lay-verify="required" placeholder="一般为网站名称" value="" class="layui-input">'
-            ,'</div>'
-          ,'</li>'
-          ,'<li class="layui-form-item">'
-            ,'<label class="layui-form-label">精华网址</label>'
-            ,'<div class="layui-input-block">'
-              ,'<input required name="link" lay-verify="url" placeholder="必须是自己或自己参与过的项目" value="" class="layui-input">'
-            ,'</div>'
-          ,'</li>'
-          ,'<li class="layui-form-item layui-form-text">'
-            ,'<label class="layui-form-label">精华描述</label>'
-            ,'<div class="layui-input-block layui-form-text">'
-              ,'<textarea required name="desc" lay-verify="required" autocomplete="off" placeholder="大致介绍你的项目，也可以阐述你在该项目中使用 layui 的感受\n10-60个字" class="layui-textarea"></textarea>'
-            ,'</div>'
-          ,'</li>'
-          ,'<li class="layui-form-item">'
-            ,'<label class="layui-form-label">精华封面</label>'
-            ,'<div class="layui-input-inline" style="width:auto;">'
-              ,'<input type="hidden" name="cover" lay-verify="required" class="layui-input fly-case-image">'
-              ,'<button type="button" class="layui-btn layui-btn-primary" id="caseUpload">'
-                ,'<i class="layui-icon">&#xe67c;</i>上传图片'
-              ,'</button>'
-            ,'</div>'
-            ,'<div class="layui-form-mid layui-word-aux" id="preview">推荐尺寸：478*300，大小不能超过 30kb</div>'
-          ,'</li>'
-          ,'<li class="layui-form-item">'
-            ,'<label class="layui-form-label"> </label>'
-            ,'<div class="layui-input-block">'
-              ,'<input type="checkbox" name="agree" id="agree" title="我同意（如果你进行了刷赞行为，你的精华将被立马剔除）" lay-skin="primary">'
-            ,'</div>'
-          ,'</li>'
-          ,'<li class="layui-form-item">'
-            ,'<div class="layui-input-block">'
-              ,'<button type="button" lay-submit lay-filter="pushCase" class="layui-btn">提交精华</button>'
-           ,'</div>'
-          ,'</li>'
-        ,'</ul>'].join('')
-        ,success: function(layero, index){
-          var image = layero.find('.fly-case-image')
-          ,preview = $('#preview');
- 
-          upload.render({
-            url: '/api/upload/case/'
-            ,elem: '#caseUpload'
-            ,size: 30
-            ,done: function(res){
-              if(res.status == 1){
-                image.val(res.url);
-                preview.html('<a href="'+ res.url +'" target="_blank" style="color: #5FB878;">封面已上传，点击可预览</a>');
-              } else {
-                layer.msg(res.msg, {icon: 5});
-              }
-            }
-          });
-
-          form.render('checkbox').on('submit(pushCase)', function(data){
-            if(!data.field.agree){
-              return layer.tips('你需要同意才能提交', $('#agree').next(), {tips: 1});
-            }
-
-            fly.json('/case/push/', data.field, function(res){
-              layer.close(index);
-              layer.alert(res.msg, {
-                icon: 1
-              })
-            });
-          });
-        }
-      });
-    }
-    
     //点赞
-    ,praise: function(othis){
+    praise: function(othis){
       var li = othis.parents('li')
       ,PRIMARY = 'layui-btn-primary'
       ,unpraise = !othis.hasClass(PRIMARY)
