@@ -114,6 +114,37 @@ layui.define(['jquery','layer'],function(exports){
           }
       });
   }
+    function userReply() {
+        $.ajax({
+            url: "/api/user/lastReplyPort",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: {
+                'alias':UrlParm.parm("alias")?UrlParm.parm("alias"):layui.cache.user.alias
+            },
+            error:function(res){
+                layer.msg('异常' ,{shift: 6});
+            },
+            success:function(res){
+                if(res && res.length > 0){
+                    $("#lastReplyPortNone").remove();
+                    for(var x = 0;x <res.length;x++){
+                        var data = res[x];
+                        var rt = sendPort.replace(/{classId}/g,data.classId)
+                            .replace(/{portId}/g,data.id)
+                            .replace(/{name}/g,data.name)
+                            .replace(/{createTime}/g,data.createTime)
+                            .replace(/{replyNumber}/g,data.replyNumber)
+                            .replace(/{isEssence}/g,data.isEssence?'isEssenceTrue':'isEssenceFalse');
+                        $("#lastReplyPort").append(rt);
+                    }
+                    $(".isEssenceFalse").remove();
+                }
+            }
+        });
+    }
+
   function getUserHome(){
       $.ajax({
           url: "/api/user/home",
@@ -140,6 +171,7 @@ layui.define(['jquery','layer'],function(exports){
                   }
                   if(res.state == 1){
                       userPort();
+                      userReply();
                   }
               } else {
                   layer.msg('异常',{shift: 6});
