@@ -286,7 +286,8 @@ layui.config({
       data: {
         "classId": UrlParm.parm('classId'),
         "portId": UrlParm.parm('id'),
-        "id": curColect.id
+        "id": curColect.id,
+        "portTitle":layui.$("#htmlTitle").text()
       },
       async: false,
       success: function(data){

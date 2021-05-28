@@ -87,37 +87,14 @@
     <i class="layui-icon">&#xe602;</i>
   </div>
   <div class="site-mobile-shade"></div>
-  
-  
-  <div class="fly-panel fly-panel-user" pad20>
-    <!--
-    <div class="fly-msg" style="margin-top: 15px;">
-      您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
-    </div>
-    -->
-    <div class="" lay-filter="user">
-      <ul class="layui-nav" style="padding: 0">
-        <li class="layui-nav-item layui-this" id="navMyport">
-          <a href="javascript:;">我的发贴</a>
-          <dl class="layui-nav-child">
-            <dd class="layui-this"><a href="javascript:changeClassId(11);">后端</a></dd>
-            <dd><a href="javascript:changeClassId(12);">前端</a></dd>
-            <dd><a href="javascript:changeClassId(13);">数据</a></dd>
-            <dd><a href="javascript:changeClassId(14);">综合</a></dd>
-          </dl>
-        </li>
-        <li class="layui-nav-item" id="navMycolport">
-          <a href="javascript:;">我的收藏</a>
-          <dl class="layui-nav-child">
-            <dd><a href="javascript:changeClassId(21);">后端</a></dd>
-            <dd><a href="javascript:changeClassId(22);">前端</a></dd>
-            <dd><a href="javascript:changeClassId(23);">数据</a></dd>
-            <dd><a href="javascript:changeClassId(24);">综合</a></dd>
-          </dl>
-        </li>
-      </ul>
 
-      <div class="layui-tab-content">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li data-type="mine-jie"   id="pageindex" onclick="pageHtmlChange('pageindex')" class="layui-this">我发的帖</li>
+        <li data-type="collection" id="pagecollection" onclick="pageHtmlChange('pagecollection')">我收藏的帖</li>
+      </ul>
+      <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
           <ul class="mine-view jie-row" id="myPortQuery">
           </ul>
@@ -147,6 +124,7 @@
       </div>
     </div>
   </div>
+  </div>
 </div>
 
 <div class="fly-footer">
@@ -162,7 +140,6 @@
 <script>
 var currentPage = 1;
 var currentPageCol = 1;
-var classId = 1;
 layui.config({
   version: "3.0.0"
   ,base: '/res/mods/'
@@ -174,6 +151,7 @@ layui.config({
      window.location.href="/user/login.html";
   };
   myReport();
+  myReportCol();
 });
 var str = " <li>\n" +
         "              <a class=\"jie-title\" href=\"/jie/detail.html?classId={classId}&id={dataId}\" target=\"_blank\">{poreTitle}</a>\n" +
@@ -204,7 +182,6 @@ function myReport(){
     dataType: "json",
     async: false,
     data: {
-      "classId":classId,
       "currentPage":currentPage
     },
     error:function(res){
@@ -215,7 +192,7 @@ function myReport(){
       if(res && res.datas.length > 0){
         for(var x=0;x<res.datas.length;x++) {
           var resData = res.datas[x];
-          var rt = str.replace(/{classId}/g,classId).replace(/{dataId}/g,resData.id)
+          var rt = str.replace(/{classId}/g,resData.classId).replace(/{dataId}/g,resData.id)
                   .replace(/{poreTitle}/g,resData.name).replace(/{createTime}/g,resData.createTime)
                   .replace(/{replyNumber}/g,resData.replyNumber);
           layui.$("#myPortQuery").append(rt);
@@ -236,7 +213,6 @@ function myReportCol(){
     dataType: "json",
     async: false,
     data: {
-      "classId":classId,
       "currentPage":currentPageCol
     },
     error:function(res){
@@ -247,7 +223,7 @@ function myReportCol(){
       if(res && res.datas.length > 0){
         for(var x=0;x<res.datas.length;x++) {
           var resData = res.datas[x];
-          var rt = strCol.replace(/{classId}/g,classId).replace(/{dataId}/g,resData.portId)
+          var rt = strCol.replace(/{classId}/g,resData.classId).replace(/{dataId}/g,resData.portId)
                   .replace(/{poreTitle}/g,resData.portTitle).replace(/{collectTime}/g,resData.collectTime);
           layui.$("#myColQuery").append(rt);
         }
@@ -260,73 +236,18 @@ function myReportCol(){
     }
   });
 };
-function changeClassId(curp){
-  currentPage = 1;
-  currentPageCol = 1;
-  switch (curp) {
-    case 11:
-      classId = 1;
-      layui.$("#myColQuery").parent().removeClass("layui-show");
-      layui.$("#navMycolport").removeClass("layui-this");
+function pageHtmlChange(st){
+  layui.$("#pageindex").removeClass("layui-this");
+  layui.$("#pagecollection").removeClass("layui-this");
+  layui.$("#"+st).addClass("layui-this");
+  switch (st){
+    case "pageindex":
       layui.$("#myPortQuery").parent().addClass("layui-show");
-      layui.$("#navMyport").addClass("layui-this");
-      myReport();
-      break;
-    case 12:
-      classId = 2;
       layui.$("#myColQuery").parent().removeClass("layui-show");
-      layui.$("#navMycolport").removeClass("layui-this");
-      layui.$("#myPortQuery").parent().addClass("layui-show");
-      layui.$("#navMyport").addClass("layui-this");
-      myReport();
       break;
-    case 13:
-      classId = 3;
-      layui.$("#myColQuery").parent().removeClass("layui-show");
-      layui.$("#navMycolport").removeClass("layui-this");
-      layui.$("#myPortQuery").parent().addClass("layui-show");
-      layui.$("#navMyport").addClass("layui-this");
-      myReport();
-      break;
-    case 14:
-      classId = 4;
-      layui.$("#myColQuery").parent().removeClass("layui-show");
-      layui.$("#navMycolport").removeClass("layui-this");
-      layui.$("#myPortQuery").parent().addClass("layui-show");
-      layui.$("#navMyport").addClass("layui-this");
-      myReport();
-      break;
-    case 21:
-      classId = 1;
-      layui.$("#myPortQuery").parent().removeClass("layui-show");
-      layui.$("#navMyport").removeClass("layui-this");
+    case "pagecollection":
       layui.$("#myColQuery").parent().addClass("layui-show");
-      layui.$("#navMycolport").addClass("layui-this");
-      myReportCol();
-      break;
-    case 22:
-      classId = 2;
       layui.$("#myPortQuery").parent().removeClass("layui-show");
-      layui.$("#navMyport").removeClass("layui-this");
-      layui.$("#myColQuery").parent().addClass("layui-show");
-      layui.$("#navMycolport").addClass("layui-this");
-      myReportCol();
-      break;
-    case 23:
-      classId = 3;
-      layui.$("#myPortQuery").parent().removeClass("layui-show");
-      layui.$("#navMyport").removeClass("layui-this");
-      layui.$("#myColQuery").parent().addClass("layui-show");
-      layui.$("#navMycolport").addClass("layui-this");
-      myReportCol();
-      break;
-    case 24:
-      classId = 4;
-      layui.$("#myPortQuery").parent().removeClass("layui-show");
-      layui.$("#navMyport").removeClass("layui-this");
-      layui.$("#myColQuery").parent().addClass("layui-show");
-      layui.$("#navMycolport").addClass("layui-this");
-      myReportCol();
       break;
   }
 };

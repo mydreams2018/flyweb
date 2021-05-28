@@ -100,6 +100,9 @@ layui.define(['jquery','layer'],function(exports){
               if(res.length > 0){
                     $("#lastSendPortNone").remove();
                     for(var x = 0;x <res.length;x++){
+                        if(x==10){
+                            break;
+                        }
                         var data = res[x];
                        var rt = sendPort.replace(/{classId}/g,data.classId)
                             .replace(/{portId}/g,data.id)
