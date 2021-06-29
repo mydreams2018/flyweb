@@ -528,7 +528,10 @@ body .fly-user-main{position: relative; min-height: 600px;}
 
 .customselect{
   width: 70px;
-  border: 0;
+  box-shadow: none;
+  outline: none;
+  border: none;
+  text-indent: 4px;
 }
 
 
