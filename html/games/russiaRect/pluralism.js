@@ -1,7 +1,7 @@
 var dataRect = new Array(18);
 var dataRectTemp = new Array(18);
 var totalClearCount = 0;
-var dataColor = ["black","red","green","blue","beige","firebrick","greenyellow"];
+const dataColor = ["black","red","green","blue","beige","firebrick","greenyellow"];
 var dataWidth ;
 var dataHeight;
 var timeRun;
@@ -108,17 +108,17 @@ dataServen[1]=[
 ];
 var dataPluralisms = [dataSquare,dataLine,dataOne,dataTwo,dataThree,dataSix,dataServen];
 function initDataRect() {
-    for(var x=0;x<dataRect.length;x++){
+    for(let x=0;x<dataRect.length;x++){
         dataRect[x] = [0,0,0,0,0,0,0,0,0,0,0,0,0];
     }
 };
 function saveTemp() {
-    for(var x=0;x<dataRect.length;x++){
+    for(let x=0;x<dataRect.length;x++){
         dataRectTemp[x] = dataRect[x].concat();
     }
 };
 function revertTemp() {
-    for(var x=0;x<dataRect.length;x++){
+    for(let x=0;x<dataRect.length;x++){
         dataRect[x] = dataRectTemp[x].concat();
     }
 };
@@ -163,10 +163,10 @@ function checkData(obj){
         isHasData = false;
         return false;
     }
-    var tempYY = currentData[dataIndex].length-1;
-    for(var y = 0;y<currentData[dataIndex].length;y++){
-        var tempY = positonY - y;
-        for(var x = 0;x < currentData[dataIndex][0].length;x++ ){
+    let tempYY = currentData[dataIndex].length-1;
+    for(let y = 0;y<currentData[dataIndex].length;y++){
+        let tempY = positonY - y;
+        for(let x = 0;x < currentData[dataIndex][0].length;x++ ){
             if(currentData[dataIndex][tempYY-y][x] != 0 && obj[tempY][positonX+x] != 0 ){
                 return false;
             }
@@ -181,10 +181,10 @@ function checkData(obj){
     return true;
 };
 function changeData() {
-    var tempYY = currentData[dataIndex].length-1;
-    for(var y = 0;y<currentData[dataIndex].length;y++){
-        var tempY = positonY - y;
-        for(var x = 0;x < currentData[dataIndex][0].length;x++ ){
+    let tempYY = currentData[dataIndex].length-1;
+    for(let y = 0;y<currentData[dataIndex].length;y++){
+        let tempY = positonY - y;
+        for(let x = 0;x < currentData[dataIndex][0].length;x++ ){
             if(currentData[dataIndex][tempYY-y][x] != 0){
                 dataRect[tempY][positonX+x] = currentData[dataIndex][tempYY-y][x];
             }
@@ -199,8 +199,8 @@ function changeData() {
 };
 function drawData() {
     canvas2d.clearRect(0,0,myCanvas.width,myCanvas.height);
-    for(var y=0;y<dataRect.length;y++){
-        for(var x=0;x<dataRect[0].length;x++){
+    for(let y=0;y<dataRect.length;y++){
+        for(let x=0;x<dataRect[0].length;x++){
             canvas2d.fillStyle=dataColor[dataRect[y][x]];
             canvas2d.fillRect(x*dataWidth,y*dataHeight,dataWidth,dataHeight);
             canvas2d.stroke();
@@ -215,8 +215,8 @@ function moveLeft(){
         positonY--;
         positonX--;
         if(checkData(dataRect)){
-            for(var y = 0;y < currentData[dataIndex].length;y++){
-                var currentTemp = currentData[dataIndex][currentData[dataIndex].length-1][currentData[dataIndex][0].length-1];
+            for(let y = 0;y < currentData[dataIndex].length;y++){
+                let currentTemp = currentData[dataIndex][currentData[dataIndex].length-1][currentData[dataIndex][0].length-1];
                 if(currentTemp != 0){
                     dataRect[positonY-y][positonX+currentData[dataIndex][0].length] = 0;
                 }
@@ -242,8 +242,8 @@ function moveLeft(){
     }
 };
 function tempRight(){
-        for(var y = 0;y < currentData[dataIndex].length;y++){
-            var currentTemp = currentData[dataIndex][currentData[dataIndex].length-1][0];
+        for(let y = 0;y < currentData[dataIndex].length;y++){
+            let currentTemp = currentData[dataIndex][currentData[dataIndex].length-1][0];
             if(currentTemp != 0){
                 dataRect[positonY-y][positonX-1] = 0;
             }
@@ -279,10 +279,10 @@ function moveRight() {
                 return;
             }
         }else{
-            var tempCount = 0;
-            out: for(var x = 0;x < currentData[dataIndex][0].length;x++){
-                for(var y=0;y<currentData[dataIndex].length;y++){
-                    var templength = currentData[dataIndex][currentData[dataIndex].length-1-y][currentData[dataIndex][0].length-1-x];
+            let tempCount = 0;
+            out: for(let x = 0;x < currentData[dataIndex][0].length;x++){
+                for(let y=0;y<currentData[dataIndex].length;y++){
+                    let templength = currentData[dataIndex][currentData[dataIndex].length-1-y][currentData[dataIndex][0].length-1-x];
                     if(templength == 0){
                         tempCount++;
                     }else{
@@ -290,7 +290,7 @@ function moveRight() {
                     }
                 }
             }
-            var autoNumber = Math.floor(tempCount/currentData[dataIndex].length);
+            let autoNumber = Math.floor(tempCount/currentData[dataIndex].length);
             if(dataRect[0].length - positonX > currentData[dataIndex][0].length - autoNumber){
                 positonX++;
                 if(checkData(dataRect)){
@@ -307,10 +307,10 @@ function moveRight() {
     }
 };
 function clearTemp() {
-    var tempYY = currentData[dataIndex].length-1;
-    for(var y = 0;y<currentData[dataIndex].length;y++){
-        var tempY = positonY - y;
-        for(var x = 0;x < currentData[dataIndex][0].length;x++ ){
+    let tempYY = currentData[dataIndex].length-1;
+    for(let y = 0;y<currentData[dataIndex].length;y++){
+        let tempY = positonY - y;
+        for(let x = 0;x < currentData[dataIndex][0].length;x++ ){
             if(currentData[dataIndex][tempYY-y][x] != 0){
                 dataRectTemp[tempY][positonX+x] = 0;
             }
@@ -329,7 +329,7 @@ function chameleon(){
     }
     if(currentData.length != 1){
         positonY--;
-        var tempIndex = dataIndex;
+        let tempIndex = dataIndex;
         dataIndex = dataIndex + 1 < currentData.length?dataIndex+1 : 0;
         if(currentData[dataIndex][0].length <= dataRect[0].length-positonX
             && checkData(dataRect)){
@@ -355,8 +355,8 @@ function chameleon(){
 function checkFull() {
     clearInterval(timeRun);
     positonY--;
-    for(var y=0; y < currentData[dataIndex].length; ){
-        for(var x = 0; x < dataRect[0].length;x++){
+    for(let y=0; y < currentData[dataIndex].length; ){
+        for(let x = 0; x < dataRect[0].length;x++){
             if(dataRect[positonY-y][x] == 0){
                 y++;
                 break;
@@ -378,7 +378,7 @@ function clearFull(currentY) {
     if(currentY == 0){
         dataRect[0] = [0,0,0,0,0,0,0,0,0,0,0,0,0];
     }else{
-        for(var y = currentY ;y > 0 ;y--){
+        for(let y = currentY ;y > 0 ;y--){
             dataRect[y] = dataRect[y-1];
         }
         dataRect[0] = [0,0,0,0,0,0,0,0,0,0,0,0,0];

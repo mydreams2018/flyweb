@@ -12,34 +12,34 @@ var dataColour = ["white","blue","black","red"];
 var dataWidth;
 var dataHeight;
 function initDataSnake() {
-    for(var y =0;y < dataRect.length;y++){
+    for(let y =0;y < dataRect.length;y++){
         dataRect[y]=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
             ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     }
-    for(var i=0;i<3;i++){
-        var temp = new SnakePosition();
+    for(let i=0;i<3;i++){
+        let temp = new SnakePosition();
         temp.x = Math.floor(dataRect[0].length / 2 )+ i;
         temp.y = Math.floor(dataRect.length / 2 );
         snakes.push(temp);
     }
 };
 function loopFoods(){
-    var tempX = Math.floor(Math.random()*50);
-    var tempY = Math.floor(Math.random()*50);
+    let tempX = Math.floor(Math.random()*50);
+    let tempY = Math.floor(Math.random()*50);
     dataRect[tempY][tempX] = 1;
 };
 function transformSnakes(){
     //初始化snakes数据 如果有食物吃掉食物
-    for(var i = 0;i<snakes.length;i++){
+    for(let i = 0;i<snakes.length;i++){
         if(dataRect[snakes[i].y][snakes[i].x] != 0){
             if(dataRect[snakes[i].y][snakes[i].x] == 1){
                 document.getElementById("snakesMp3").play();
                 //吃的
-                var tempEnd = snakes[snakes.length-1];
-                var tempEndLast = snakes[snakes.length-2];
+                let tempEnd = snakes[snakes.length-1];
+                let tempEndLast = snakes[snakes.length-2];
                 if(tempEnd.y == tempEndLast.y){
                     if(tempEnd.x > tempEndLast.x){
-                        var temp = new SnakePosition();
+                        let temp = new SnakePosition();
                         temp.x = tempEnd.x +1;
                         temp.y = tempEnd.y;
                         if(temp.x > dataRect[0].length-1){
@@ -47,7 +47,7 @@ function transformSnakes(){
                         }
                         snakes.push(temp);
                     }else{
-                        var temp = new SnakePosition();
+                        let temp = new SnakePosition();
                         temp.x = tempEnd.x - 1;
                         temp.y = tempEnd.y;
                         if(temp.x < 0){
@@ -57,7 +57,7 @@ function transformSnakes(){
                     }
                 }else{
                     if(tempEnd.y > tempEndLast.y){
-                        var temp = new SnakePosition();
+                        let temp = new SnakePosition();
                         temp.x = tempEnd.x;
                         temp.y = tempEnd.y + 1;
                         if(temp.y > dataRect.length-1){
@@ -65,7 +65,7 @@ function transformSnakes(){
                         }
                         snakes.push(temp);
                     }else{
-                        var temp = new SnakePosition();
+                        let temp = new SnakePosition();
                         temp.x = tempEnd.x;
                         temp.y = tempEnd.y - 1;
                         if(temp.y < 0){
@@ -78,7 +78,7 @@ function transformSnakes(){
             }
         }
     }
-    for(var i = 0;i < snakes.length; i++){
+    for(let i = 0;i < snakes.length; i++){
         if(dataRect[snakes[i].y][snakes[i].x] != 0){
             if(dataRect[snakes[i].y][snakes[i].x] == 2){
                 gameOver("自已碰到自已游戏失败");
@@ -96,8 +96,8 @@ function transformSnakes(){
 };
 function drawDataRect(){
     canvas2d.clearRect(0,0,myCanvas.width,myCanvas.height);
-    for(var y=0;y<dataRect.length;y++){
-        for(var x = 0;x < dataRect[0].length;x++){
+    for(let y=0;y<dataRect.length;y++){
+        for(let x = 0;x < dataRect[0].length;x++){
             if(dataRect[y][x] != 0){
                 canvas2d.beginPath();
                 canvas2d.strokeStyle="greenyellow";
@@ -112,7 +112,7 @@ function drawDataRect(){
     }
 };
 function clearDataRect(){
-    for(var i = 0 ; i < snakes.length; i++){
+    for(let i = 0 ; i < snakes.length; i++){
         dataRect[snakes[i].y][snakes[i].x] = 0;
     }
 };
